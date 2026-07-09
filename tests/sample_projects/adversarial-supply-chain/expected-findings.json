@@ -1,0 +1,30 @@
+{
+  "fixture": "adversarial-supply-chain",
+  "profile": "enterprise",
+  "expected_findings": [
+    {
+      "rule_id": "LIC-007",
+      "severity": "Critical",
+      "decision_impact": "Block",
+      "file_contains": "package.json",
+      "critical": true,
+      "description": "AGPL license should require blocking enterprise review in strict profile."
+    },
+    {
+      "rule_id": "LIC-009",
+      "severity": "High",
+      "decision_impact": "Mandatory Review",
+      "file_contains": "tool.jar",
+      "critical": false,
+      "description": "Committed binary artifact should require provenance and license review."
+    },
+    {
+      "rule_id": "LIC-003",
+      "severity": "High",
+      "decision_impact": "Mandatory Review",
+      "file_contains": "package.json",
+      "critical": false,
+      "description": "Dependency missing local license evidence should be detected."
+    }
+  ]
+}

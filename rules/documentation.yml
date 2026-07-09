@@ -1,0 +1,9 @@
+rules:
+  - rule_id: DOC-001
+    name: Missing Required Documentation
+    category: Documentation
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [System Owner]
+    score_impact: {Documentation: -10}

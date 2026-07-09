@@ -1,0 +1,156 @@
+rules:
+  - rule_id: DEL-001
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Deployment Guide
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [DevOps, Enterprise Architecture]
+    score_impact: {Operations: -20}
+    remediation: [Add deployment guide or deployment automation evidence]
+
+  - rule_id: DEL-002
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Rollback Procedure
+    category: Operations
+    severity: Critical
+    applies_to_profiles: [production-critical]
+    decision: Block
+    requires_approval_from: [Operations, Enterprise Architecture]
+    score_impact: {Operations: -40}
+    remediation: [Add rollback procedure and ownership evidence]
+
+  - rule_id: DEL-003
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Runbook
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations]
+    score_impact: {Operations: -20}
+    remediation: [Add operational runbook]
+
+  - rule_id: DEL-004
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Architecture Overview
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Enterprise Architecture]
+    score_impact: {Operations: -20}
+    remediation: [Add architecture overview]
+
+  - rule_id: DEL-005
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Support Model
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations, ITGC]
+    score_impact: {Operations: -20}
+    remediation: [Add support model and operational ownership evidence]
+
+  - rule_id: DEL-006
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Changelog or Release Notes
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead]
+    score_impact: {Operations: -20}
+    remediation: [Add changelog, release notes, CI/CD workflow, or documented release procedure]
+
+  - rule_id: DEL-007
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Data Flow Documentation
+    category: Operations
+    severity: High
+    applies_to_profiles: [finance-sox, ai-enabled, production-critical]
+    decision: Mandatory Review
+    requires_approval_from: [SOX, Data Governance]
+    score_impact: {Operations: -20}
+    remediation: [Add data flow documentation and required control review]
+
+  - rule_id: DEL-008
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Test Evidence
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead]
+    score_impact: {Operations: -20}
+    remediation: [Add automated tests or documented test execution evidence]
+
+  - rule_id: DEL-009
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Monitoring or Health Check Evidence
+    category: Operations
+    severity: High
+    applies_to_profiles: [production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations]
+    score_impact: {Operations: -20}
+    remediation: [Add monitoring documentation or health check evidence]
+
+  - rule_id: DEL-010
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Backup/Restore Documentation
+    category: Operations
+    severity: High
+    applies_to_profiles: [production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations, ITGC]
+    score_impact: {Operations: -20}
+    remediation: [Add backup and restore documentation]
+
+  - rule_id: DEL-011
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Incident Response Notes
+    category: Operations
+    severity: High
+    applies_to_profiles: [production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations, Security]
+    score_impact: {Operations: -20}
+    remediation: [Add incident response notes and escalation paths]
+
+  - rule_id: DEL-012
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Configuration Management Notes
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [DevOps, Security Architecture]
+    score_impact: {Operations: -20}
+    remediation: [Document configuration management, environment separation, and logging/control evidence]

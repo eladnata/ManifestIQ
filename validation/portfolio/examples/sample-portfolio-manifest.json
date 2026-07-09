@@ -1,0 +1,18 @@
+{
+  "schema": "enterprise-whitebox-validation-portfolio",
+  "schema_version": "0.1",
+  "portfolio_id": "pilot-portfolio-v0.1",
+  "description": "Initial deterministic sample portfolio for local validation.",
+  "created_at": "2026-07-09",
+  "scanner_version": "sample",
+  "ruleset_version": "sample-ruleset",
+  "comparison_reports": [
+    {
+      "repo_id": "sample-insecure-python",
+      "profile": "finance-sox",
+      "comparison_report_path": "goldset-output/goldset-comparison-report.json",
+      "worksheet_path": "validation/gold_sets/examples/sample-reviewer-worksheet.json",
+      "triage_path": "validation/portfolio/examples/sample-scanner-only-triage.json"
+    }
+  ]
+}

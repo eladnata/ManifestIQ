@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Enterprise White-Box Code Assurance Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 32px; color: #17202a; }
+    h1, h2 { color: #1b2631; }
+    .decision { padding: 16px; border: 1px solid #bbb; border-radius: 8px; background: #f7f9f9; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+    th, td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
+    th { background: #f2f3f4; text-align: left; }
+    .Critical { color: #922b21; font-weight: bold; }
+    .High { color: #b03a2e; font-weight: bold; }
+    .Medium { color: #b9770e; font-weight: bold; }
+    .Low { color: #1f618d; font-weight: bold; }
+    code { background: #f4f6f7; padding: 2px 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Enterprise White-Box Code Assurance Report</h1>
+
+  <div class="decision">
+    <h2>Final Decision: {{ summary.decision }}</h2>
+    <p><strong>Overall Score:</strong> {{ summary.score }}/100</p>
+    <p><strong>Profile:</strong> {{ summary.profile }}</p>
+    <p><strong>Scanner Version:</strong> {{ summary.scanner_version }}</p>
+    <p><strong>Ruleset Version:</strong> {{ summary.ruleset_version }}</p>
+    <p><strong>Evidence SHA256:</strong> <code>{{ summary.evidence_sha256 | default('calculated in manifest') }}</code></p>
+  </div>
+
+  <h2>Blocking Gates</h2>
+  <table>
+    <tr><th>Finding ID</th><th>Rule</th><th>Severity</th><th>Category</th><th>Decision Impact</th><th>Title</th></tr>
+    {% for gate in summary.blocking_gates %}
+    <tr>
+      <td>{{ gate.finding_id }}</td>
+      <td>{{ gate.rule_id }}</td>
+      <td class="{{ gate.severity }}">{{ gate.severity }}</td>
+      <td>{{ gate.category }}</td>
+      <td>{{ gate.decision_impact }}</td>
+      <td>{{ gate.title }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6">No blocking or mandatory-review gates were produced.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Undeclared AI / Model Risk</h2>
+  <table>
+    <tr><th>ID</th><th>Severity</th><th>Evidence</th><th>Title</th><th>Required Review</th></tr>
+    {% for f in findings if f.category == 'AI Model Risk' %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}{% if f.line_start %}:{{ f.line_start }}{% endif %}</td>
+      <td>{{ f.title }}<br><small>{{ f.description }}</small></td>
+      <td>{{ f.requires_approval_from }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No AI/model risk indicators were detected by the static rule set.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Disabled Baseline Rules</h2>
+  <table>
+    <tr><th>Rule ID</th><th>Reason</th><th>Approver</th><th>Expiration</th></tr>
+    {% for item in summary.disabled_baseline_rules %}
+    <tr>
+      <td>{{ item.rule_id }}</td>
+      <td>{{ item.reason }}</td>
+      <td>{{ item.approver }}</td>
+      <td>{{ item.expiration_date }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">No baseline rule disablement requests were present.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Source Metadata</h2>
+  <table>
+    {% for key, value in summary.source_metadata.items() %}
+    <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Inventory Summary</h2>
+  <table>
+    <tr><th>File Count</th><td>{{ summary.inventory_summary.file_count }}</td></tr>
+    <tr><th>Total Bytes</th><td>{{ summary.inventory_summary.total_bytes }}</td></tr>
+    <tr><th>Languages</th><td>{{ summary.inventory_summary.languages }}</td></tr>
+    <tr><th>Package Managers</th><td>{{ summary.inventory_summary.package_managers }}</td></tr>
+  </table>
+
+  <h2>Finding Counts</h2>
+  <table>
+    <tr><th>Severity</th><th>Count</th></tr>
+    {% for severity, count in summary.finding_counts.items() %}
+    <tr><td class="{{ severity }}">{{ severity }}</td><td>{{ count }}</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Required Remediation Before Approval</h2>
+  <table>
+    <tr><th>Finding ID</th><th>Rule</th><th>Severity</th><th>Remediation</th></tr>
+    {% for f in findings if f.decision_impact in ['Block', 'Mandatory Review'] or f.severity in ['Critical', 'High'] %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td>{{ f.rule_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td><ul>{% for r in f.remediation %}<li>{{ r }}</li>{% endfor %}</ul></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">No required remediation items were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Project Structure Assessment</h2>
+  <table>
+    <tr><th>Metric</th><th>Value</th></tr>
+    {% for a in analyzer_results if a.analyzer_id == 'project_structure' %}
+    {% for key, value in a.metrics.items() %}
+    <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+    {% endfor %}
+    {% endfor %}
+  </table>
+
+  <h2>Project Structure Findings</h2>
+  <table>
+    <tr><th>ID</th><th>Severity</th><th>Title</th><th>Evidence</th><th>Decision Impact</th></tr>
+    {% for f in findings if f.rule_id.startswith('ARCH-') %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td>{% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}{% if f.evidence_snippet %}<br><small>{{ f.evidence_snippet }}</small>{% endif %}</td>
+      <td>{{ f.decision_impact }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No project structure findings were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Delivery Readiness Assessment</h2>
+  <table>
+    <tr><th>Metric</th><th>Value</th></tr>
+    {% for a in analyzer_results if a.analyzer_id == 'delivery_readiness' %}
+    {% for key, value in a.metrics.items() %}
+    <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+    {% endfor %}
+    {% endfor %}
+  </table>
+
+  <h2>Missing Enterprise Delivery Artifacts</h2>
+  <table>
+    <tr><th>ID</th><th>Severity</th><th>Title</th><th>Decision Impact</th><th>Remediation</th></tr>
+    {% for f in findings if f.rule_id.startswith('DEL-') %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td>{{ f.decision_impact }}</td>
+      <td><ul>{% for r in f.remediation %}<li>{{ r }}</li>{% endfor %}</ul></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No delivery readiness findings were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Repository Hygiene Findings</h2>
+  <table>
+    <tr><th>ID</th><th>Rule</th><th>Severity</th><th>Title</th><th>Evidence</th></tr>
+    {% for f in findings if f.rule_id in ['ARCH-005', 'ARCH-006', 'ARCH-007', 'ARCH-008', 'ARCH-012'] %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td>{{ f.rule_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td>{% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}{% if f.evidence_snippet %}<br><small>{{ f.evidence_snippet }}</small>{% endif %}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No repository hygiene findings were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Entry Point / Build / Test / CI/CD Status</h2>
+  <table>
+    <tr><th>Signal</th><th>Value</th></tr>
+    {% for a in analyzer_results if a.analyzer_id == 'project_structure' %}
+    <tr><th>Entry points detected</th><td>{{ a.metrics.entry_points_detected }}</td></tr>
+    <tr><th>Build files detected</th><td>{{ a.metrics.build_files_detected }}</td></tr>
+    <tr><th>Test directory detected</th><td>{{ a.metrics.test_directory_detected }}</td></tr>
+    <tr><th>CI/CD detected</th><td>{{ a.metrics.ci_cd_detected }}</td></tr>
+    <tr><th>Source directory detected</th><td>{{ a.metrics.source_directory_detected }}</td></tr>
+    {% endfor %}
+    {% for a in analyzer_results if a.analyzer_id == 'delivery_readiness' %}
+    <tr><th>Test evidence present</th><td>{{ a.metrics.test_evidence_present }}</td></tr>
+    <tr><th>Deployment script present</th><td>{{ a.metrics.deployment_script_present }}</td></tr>
+    <tr><th>Rollback script present</th><td>{{ a.metrics.rollback_script_present }}</td></tr>
+    <tr><th>Delivery readiness score</th><td>{{ a.metrics.delivery_readiness_score }}</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Operational Readiness Assessment</h2>
+  <table>
+    <tr><th>Metric</th><th>Value</th></tr>
+    {% for a in analyzer_results if a.analyzer_id == 'operational' %}
+    {% for key, value in a.metrics.items() %}
+    <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+    {% endfor %}
+    {% endfor %}
+  </table>
+
+  <h2>Observability Summary</h2>
+  <table>
+    <tr><th>Signal</th><th>Value</th></tr>
+    {% for a in analyzer_results if a.analyzer_id == 'operational' %}
+    <tr><th>Logging indicators</th><td>{{ a.metrics.logging_indicators_count }}</td></tr>
+    <tr><th>Audit logging indicators</th><td>{{ a.metrics.audit_logging_indicators_count }}</td></tr>
+    <tr><th>Monitoring indicators</th><td>{{ a.metrics.monitoring_indicators_count }}</td></tr>
+    <tr><th>Alerting indicators</th><td>{{ a.metrics.alerting_indicators_count }}</td></tr>
+    <tr><th>Health check indicators</th><td>{{ a.metrics.health_check_indicators_count }}</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Logging / Audit Logging Status</h2>
+  <table>
+    <tr><th>ID</th><th>Severity</th><th>Title</th><th>Evidence</th><th>Decision Impact</th></tr>
+    {% for f in findings if f.rule_id in ['OPS-001', 'OPS-002', 'OPS-014'] %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td>{% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}{% if f.evidence_snippet %}<br><small>{{ f.evidence_snippet }}</small>{% endif %}</td>
+      <td>{{ f.decision_impact }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No logging or audit logging findings were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Monitoring / Health Check Status</h2>
+  <table>
+    <tr><th>ID</th><th>Severity</th><th>Title</th><th>Evidence</th><th>Decision Impact</th></tr>
+    {% for f in findings if f.rule_id in ['OPS-003', 'OPS-004', 'OPS-008'] %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td>{% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}{% if f.evidence_snippet %}<br><small>{{ f.evidence_snippet }}</small>{% endif %}</td>
+      <td>{{ f.decision_impact }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No monitoring or health check findings were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Backup / Restore Status</h2>
+  <table>
+    <tr><th>ID</th><th>Severity</th><th>Title</th><th>Evidence</th><th>Decision Impact</th></tr>
+    {% for f in findings if f.rule_id in ['OPS-005', 'OPS-009'] %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td>{% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}{% if f.evidence_snippet %}<br><small>{{ f.evidence_snippet }}</small>{% endif %}</td>
+      <td>{{ f.decision_impact }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No backup or restore findings were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Incident Response Status</h2>
+  <table>
+    <tr><th>ID</th><th>Severity</th><th>Title</th><th>Evidence</th><th>Decision Impact</th></tr>
+    {% for f in findings if f.rule_id in ['OPS-006', 'OPS-012'] %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td>{% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}{% if f.evidence_snippet %}<br><small>{{ f.evidence_snippet }}</small>{% endif %}</td>
+      <td>{{ f.decision_impact }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No incident response or support model findings were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Runtime Configuration Status</h2>
+  <table>
+    <tr><th>ID</th><th>Severity</th><th>Title</th><th>Evidence</th><th>Decision Impact</th></tr>
+    {% for f in findings if f.rule_id in ['OPS-007', 'OPS-015'] %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td>{% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}{% if f.evidence_snippet %}<br><small>{{ f.evidence_snippet }}</small>{% endif %}</td>
+      <td>{{ f.decision_impact }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No runtime configuration findings were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Operational Blockers Before Approval</h2>
+  <table>
+    <tr><th>ID</th><th>Rule</th><th>Severity</th><th>Title</th><th>Remediation</th></tr>
+    {% for f in findings if f.rule_id.startswith('OPS-') and (f.decision_impact in ['Block', 'Mandatory Review'] or f.severity in ['Critical', 'High']) %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td>{{ f.rule_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td><ul>{% for r in f.remediation %}<li>{{ r }}</li>{% endfor %}</ul></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No operational blockers were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>License and SBOM Assessment</h2>
+  <table>
+    <tr><th>Metric</th><th>Value</th></tr>
+    {% for a in analyzer_results if a.analyzer_id == 'licenses' %}
+    {% for key, value in a.metrics.items() if key != 'components' %}
+    <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+    {% endfor %}
+    {% endfor %}
+  </table>
+
+  <h2>Repository License Status</h2>
+  <table>
+    <tr><th>Signal</th><th>Value</th></tr>
+    {% for a in analyzer_results if a.analyzer_id == 'licenses' %}
+    <tr><th>Repository license present</th><td>{{ a.metrics.repository_license_present }}</td></tr>
+    <tr><th>Third-party notices present</th><td>{{ a.metrics.third_party_notices_present }}</td></tr>
+    <tr><th>Local SBOM evidence path</th><td>{{ a.metrics.local_sbom_path }}</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Component License Summary</h2>
+  <table>
+    <tr><th>Name</th><th>Version</th><th>Ecosystem</th><th>License</th><th>Classification</th><th>Risk</th><th>Source</th></tr>
+    {% for a in analyzer_results if a.analyzer_id == 'licenses' %}
+    {% for c in a.metrics.components %}
+    <tr>
+      <td>{{ c.name }}</td>
+      <td>{{ c.version }}</td>
+      <td>{{ c.ecosystem }}</td>
+      <td>{{ c.declared_license }}</td>
+      <td>{{ c.license_classification }}</td>
+      <td>{{ c.risk_level }}</td>
+      <td><code>{{ c.source_file }}</code></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7">No local dependency components were detected.</td></tr>
+    {% endfor %}
+    {% endfor %}
+  </table>
+
+  <h2>Restrictive / Unknown License Findings</h2>
+  <table>
+    <tr><th>ID</th><th>Rule</th><th>Severity</th><th>Title</th><th>Evidence</th><th>Decision Impact</th></tr>
+    {% for f in findings if f.rule_id in ['LIC-003', 'LIC-004', 'LIC-005', 'LIC-006', 'LIC-007', 'LIC-008', 'LIC-015'] %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td>{{ f.rule_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td>{% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}{% if f.evidence_snippet %}<br><small>{{ f.evidence_snippet }}</small>{% endif %}</td>
+      <td>{{ f.decision_impact }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6">No restrictive, unknown, or ambiguous license findings were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Binary Artifact License Findings</h2>
+  <table>
+    <tr><th>ID</th><th>Rule</th><th>Severity</th><th>Title</th><th>Evidence</th><th>Decision Impact</th></tr>
+    {% for f in findings if f.rule_id in ['LIC-009', 'LIC-010'] %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td>{{ f.rule_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td>{% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}{% if f.evidence_snippet %}<br><small>{{ f.evidence_snippet }}</small>{% endif %}</td>
+      <td>{{ f.decision_impact }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6">No binary artifact license findings were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>License Review Required Before Approval</h2>
+  <table>
+    <tr><th>ID</th><th>Rule</th><th>Severity</th><th>Title</th><th>Remediation</th></tr>
+    {% for f in findings if f.rule_id.startswith('LIC-') and (f.decision_impact in ['Block', 'Mandatory Review'] or f.severity in ['Critical', 'High']) %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td>{{ f.rule_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.title }}</td>
+      <td><ul>{% for r in f.remediation %}<li>{{ r }}</li>{% endfor %}</ul></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No license review blockers were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Control Context</h2>
+  <table>
+    {% for key, value in assurance.control_context.items() %}
+    <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+    {% else %}
+    <tr><td>No control context was generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Signals Summary</h2>
+  <table>
+    <tr><th>Signal</th><th>Domain</th><th>Confidence</th><th>Source</th><th>Value</th></tr>
+    {% for signal in assurance.signals[:50] %}
+    <tr>
+      <td>{{ signal.signal_id }}</td>
+      <td>{{ signal.domain }}</td>
+      <td>{{ signal.confidence }}</td>
+      <td>{{ signal.source_analyzer }}</td>
+      <td>{{ signal.value }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No signals were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Evidence-Backed Claims</h2>
+  <table>
+    <tr><th>Claim ID</th><th>Type</th><th>Confidence</th><th>Statement</th><th>Limitations</th></tr>
+    {% for claim in assurance.claims[:50] %}
+    <tr>
+      <td>{{ claim.claim_id }}</td>
+      <td>{{ claim.claim_type }}</td>
+      <td>{{ claim.confidence }}</td>
+      <td>{{ claim.statement }}</td>
+      <td>{{ claim.limitations }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No claims were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Confidence Summary</h2>
+  <table>
+    <tr><th>Metric</th><th>Value</th></tr>
+    <tr><th>Confidence Counts</th><td>{{ assurance.confidence_summary.confidence_counts }}</td></tr>
+    <tr><th>Finding Confidence Counts</th><td>{{ assurance.confidence_summary.finding_confidence_counts }}</td></tr>
+    <tr><th>Low Confidence Domains</th><td>{{ assurance.confidence_summary.low_confidence_domains }}</td></tr>
+  </table>
+
+  <h2>Gap Explanations</h2>
+  <table>
+    <tr><th>Gap ID</th><th>Domain</th><th>Severity</th><th>Title</th><th>Why This Is A Gap</th><th>Decision Impact</th></tr>
+    {% for gap in assurance.gaps[:50] %}
+    <tr>
+      <td>{{ gap.gap_id }}</td>
+      <td>{{ gap.domain }}</td>
+      <td class="{{ gap.severity }}">{{ gap.severity }}</td>
+      <td>{{ gap.title }}</td>
+      <td>{{ gap.why_this_is_a_gap }}</td>
+      <td>{{ gap.decision_impact }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6">No gap explanations were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Evidence Graph Summary</h2>
+  <table>
+    <tr><th>Schema</th><td>{{ assurance.evidence_graph.schema }}</td></tr>
+    <tr><th>Node Count</th><td>{{ assurance.evidence_graph.nodes | length }}</td></tr>
+    <tr><th>Edge Count</th><td>{{ assurance.evidence_graph.edges | length }}</td></tr>
+  </table>
+
+  <h2>Enterprise Acceptance Matrix</h2>
+  <table>
+    <tr><th>Domain</th><th>Status</th><th>Confidence</th><th>Reason</th><th>Blocking Findings</th></tr>
+    {% for row in assurance.enterprise_acceptance_matrix.domains %}
+    <tr>
+      <td>{{ row.domain }}</td>
+      <td>{{ row.status }}</td>
+      <td>{{ row.confidence }}</td>
+      <td>{{ row.reason }}</td>
+      <td>{{ row.blocking_findings }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No acceptance matrix was generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>System Dossier Summary</h2>
+  <table>
+    <tr><th>Schema</th><td>{{ assurance.system_dossier.schema }}</td></tr>
+    <tr><th>System Identity</th><td>{{ assurance.system_dossier.system_identity }}</td></tr>
+    <tr><th>Technical Summary</th><td>{{ assurance.system_dossier.technical_summary }}</td></tr>
+    <tr><th>Maintenance Notes</th><td>{{ assurance.system_dossier.maintenance_continuation_notes }}</td></tr>
+  </table>
+
+  <h2>Rule Contract Validation</h2>
+  <table>
+    <tr><th>Valid</th><td>{{ assurance.rule_contract_validation.valid }}</td></tr>
+    <tr><th>Error Count</th><td>{{ assurance.rule_contract_validation.error_count }}</td></tr>
+    <tr><th>Warning Count</th><td>{{ assurance.rule_contract_validation.warning_count }}</td></tr>
+    <tr><th>Errors</th><td>{{ assurance.rule_contract_validation.errors }}</td></tr>
+  </table>
+
+  <h2>Limitations</h2>
+  <table>
+    <tr><th>Limitation</th></tr>
+    {% for limitation in assurance.system_dossier.limitations %}
+    <tr><td>{{ limitation }}</td></tr>
+    {% else %}
+    <tr><td>No limitations were recorded.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Detailed Findings</h2>
+  <table>
+    <tr>
+      <th>ID</th><th>Severity</th><th>Category</th><th>Title</th><th>Evidence</th><th>Decision Impact</th><th>Remediation</th>
+    </tr>
+    {% for f in findings %}
+    <tr>
+      <td>{{ f.finding_id }}</td>
+      <td class="{{ f.severity }}">{{ f.severity }}</td>
+      <td>{{ f.category }}</td>
+      <td>{{ f.title }}<br><small>{{ f.description }}</small></td>
+      <td>
+        {% if f.file_path %}<code>{{ f.file_path }}</code>{% endif %}
+        {% if f.line_start %}:{{ f.line_start }}{% endif %}
+      </td>
+      <td>{{ f.decision_impact }}</td>
+      <td><ul>{% for r in f.remediation %}<li>{{ r }}</li>{% endfor %}</ul></td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2>Analyzer Status</h2>
+  <table>
+    <tr><th>Analyzer</th><th>Status</th><th>Duration MS</th><th>Findings</th></tr>
+    {% for a in analyzer_results %}
+    <tr><td>{{ a.analyzer_id }}</td><td>{{ a.status }}</td><td>{{ a.duration_ms }}</td><td>{{ a.findings | length }}</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Failed or Skipped Analyzer Warnings</h2>
+  <table>
+    <tr><th>Analyzer</th><th>Status</th><th>Errors</th><th>Metrics</th></tr>
+    {% for a in analyzer_results if a.status in ['failed', 'skipped'] %}
+    <tr>
+      <td>{{ a.analyzer_id }}</td>
+      <td>{{ a.status }}</td>
+      <td>{{ a.errors }}</td>
+      <td>{{ a.metrics }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">No failed or skipped analyzers.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Disclaimer</h2>
+  <p>This scan is a deterministic static readiness assessment based on configured rules, available files, and scanner capabilities. It does not replace penetration testing, secure code review, architecture review, privacy review, legal review, or formal SOX control assessment where required.</p>
+</body>
+</html>

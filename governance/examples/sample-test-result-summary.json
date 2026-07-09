@@ -1,0 +1,13 @@
+{
+  "schema": "enterprise-whitebox-test-result-summary",
+  "schema_version": "0.1",
+  "command": "python -m pytest",
+  "status": "passed",
+  "tests_passed": 97,
+  "tests_failed": 0,
+  "duration_seconds": 26.1,
+  "generated_at": "2026-07-09T00:00:00Z",
+  "notes": [
+    "Sample summary only. Regenerate for an actual release."
+  ]
+}

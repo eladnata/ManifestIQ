@@ -1,0 +1,44 @@
+rules:
+  - rule_id: CFG-001
+    name: Debug Mode Enabled
+    category: Configuration
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, production-critical]
+    decision: Conditional
+    requires_approval_from: [Security]
+    score_impact: {Configuration: -20}
+
+  - rule_id: CFG-002
+    name: TLS Verification Disabled
+    category: Configuration
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Security]
+    score_impact: {Configuration: -20}
+
+  - rule_id: CFG-003
+    name: Wildcard CORS
+    category: Configuration
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Security]
+    score_impact: {Configuration: -20}
+
+  - rule_id: CFG-004
+    name: Public Bind
+    category: Configuration
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Advisory
+    score_impact: {Configuration: -10}
+
+  - rule_id: CFG-005
+    name: Default Credentials
+    category: Configuration
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Security]
+    score_impact: {Configuration: -20}

@@ -1,0 +1,31 @@
+profile: ai-enabled
+version: 0.2.0
+description: Strict AI-enabled assurance profile for declared model, provider, prompt, and data governance review.
+required_analyzers:
+  - secrets
+  - dependencies
+  - sast
+  - config
+  - hidden_ai_model_detector
+  - documentation
+  - data_risk
+  - maintainability
+  - operational
+  - licenses
+  - project_structure
+  - delivery_readiness
+blocking_conditions:
+  - hidden or undeclared external AI API usage
+  - model artifacts without inventory
+  - embedding/vector database usage without data governance documentation
+  - sensitive data plus AI/model indicators without classification and approval
+  - missing observability for AI/model/API usage
+  - runtime configuration gaps for model/provider keys
+  - AI/model dependency without local license evidence
+minimum_documentation:
+  - AI_USAGE
+  - AI_ARCHITECTURE
+  - MODEL_INVENTORY
+  - DATA_FLOW
+  - DATA_CLASSIFICATION
+  - PROVIDER_RISK

@@ -1,0 +1,3 @@
+# Installation
+
+Install dependencies with `pip install -r requirements.txt`.

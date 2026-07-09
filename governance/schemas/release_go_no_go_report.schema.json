@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Release Go No-Go Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "release_id",
+    "status",
+    "summary",
+    "blocking_reasons",
+    "warnings",
+    "accepted_warnings",
+    "known_limitations",
+    "evidence_files",
+    "recommendations"
+  ],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-release-go-no-go-report" },
+    "schema_version": { "const": "0.1" },
+    "release_id": { "type": "string" },
+    "status": { "type": "string", "enum": ["Go", "Conditional Go", "No-Go", "Not Evaluated"] },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "governance_check_status",
+        "test_status",
+        "sample_scan_status",
+        "adversarial_validation_status",
+        "goldset_status",
+        "portfolio_status",
+        "trend_gate_status",
+        "accepted_warnings_count",
+        "known_limitations_count",
+        "approval_decision"
+      ],
+      "properties": {
+        "governance_check_status": { "type": "string", "enum": ["Passed", "Warning", "Failed", "Missing", "Unknown"] },
+        "test_status": { "type": "string", "enum": ["passed", "failed", "unknown", "missing"] },
+        "sample_scan_status": { "type": "string", "enum": ["passed", "failed", "unknown", "missing"] },
+        "adversarial_validation_status": { "type": "string", "enum": ["passed", "warning", "failed", "missing", "unknown"] },
+        "goldset_status": { "type": "string", "enum": ["passed", "warning", "failed", "missing", "unknown"] },
+        "portfolio_status": { "type": "string", "enum": ["passed", "warning", "failed", "missing", "unknown"] },
+        "trend_gate_status": { "type": "string", "enum": ["Passed", "Warning", "Failed", "Missing", "Unknown"] },
+        "accepted_warnings_count": { "type": "integer", "minimum": 0 },
+        "known_limitations_count": { "type": "integer", "minimum": 0 },
+        "approval_decision": {
+          "type": "string",
+          "enum": ["Blocked", "Conditional", "Approved for internal validation", "Approved for pilot", "Approved for production use", "Not Requested"]
+        }
+      }
+    },
+    "blocking_reasons": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "accepted_warnings": { "type": "array", "items": { "type": "object" } },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+    "evidence_files": { "type": "array", "items": { "type": "string" } },
+    "recommendations": { "type": "array", "items": { "type": "string" } }
+  }
+}

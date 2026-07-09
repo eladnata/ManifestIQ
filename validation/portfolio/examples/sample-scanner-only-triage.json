@@ -1,0 +1,32 @@
+{
+  "schema": "enterprise-whitebox-scanner-only-triage",
+  "schema_version": "0.1",
+  "repo_id": "sample-insecure-python",
+  "scanner_run_id": "sample-run",
+  "triaged_by": [
+    {
+      "reviewer_id": "reviewer-appsec-1",
+      "role": "AppSec"
+    }
+  ],
+  "triage_items": [
+    {
+      "scanner_finding_id": "example-scanner-only-1",
+      "rule_id": "OPS-003",
+      "domain": "Operations",
+      "severity": "High",
+      "label": "valid_material",
+      "reason": "Operational evidence gap is valid and material.",
+      "confidence": "High"
+    },
+    {
+      "scanner_finding_id": "example-scanner-only-2",
+      "rule_id": "DOC-001",
+      "domain": "Documentation",
+      "severity": "Medium",
+      "label": "false_positive",
+      "reason": "Reviewer confirmed documentation exists outside repository package.",
+      "confidence": "Medium"
+    }
+  ]
+}

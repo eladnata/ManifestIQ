@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Change Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "change_id",
+    "title",
+    "change_type",
+    "reason",
+    "scope",
+    "risk_level",
+    "validation_required",
+    "tests_required",
+    "documentation_required",
+    "approval_role"
+  ],
+  "properties": {
+    "change_id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "change_type": {
+      "type": "string",
+      "enum": [
+        "analyzer",
+        "rule",
+        "profile",
+        "scoring",
+        "decision_logic",
+        "report",
+        "evidence_schema",
+        "validation",
+        "governance",
+        "cli",
+        "refactor",
+        "bug_fix",
+        "security_fix",
+        "documentation"
+      ]
+    },
+    "reason": { "type": "string" },
+    "scope": { "type": "string" },
+    "out_of_scope": { "type": "string" },
+    "affected_modules": { "type": "array", "items": { "type": "string" } },
+    "affected_rules": { "type": "array", "items": { "type": "string" } },
+    "affected_profiles": { "type": "array", "items": { "type": "string" } },
+    "affected_evidence_outputs": { "type": "array", "items": { "type": "string" } },
+    "affected_reports": { "type": "array", "items": { "type": "string" } },
+    "risk_level": { "type": "string", "enum": ["High", "Medium", "Low"] },
+    "validation_required": { "type": "boolean" },
+    "tests_required": { "type": "array", "items": { "type": "string" } },
+    "documentation_required": { "type": "boolean" },
+    "adr_required": { "type": "boolean" },
+    "rollback_plan": { "type": "string" },
+    "approval_role": {
+      "type": "string",
+      "enum": ["Maintainer", "AppSec", "CISO", "CTO", "Architecture", "SOX", "ITGC", "Legal", "Privacy", "Release Manager"]
+    },
+    "known_limitations": { "type": "array", "items": { "type": "string" } }
+  }
+}

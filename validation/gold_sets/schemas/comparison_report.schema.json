@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Gold Set Comparison Report",
+  "type": "object",
+  "required": [
+    "schema",
+    "schema_version",
+    "repo_id",
+    "profile",
+    "scanner_run_id",
+    "summary",
+    "matched_findings",
+    "missed_detectable_findings",
+    "non_detectable_human_findings",
+    "scanner_only_findings",
+    "triage_required",
+    "recommendations"
+  ],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-goldset-comparison-report" },
+    "schema_version": { "const": "0.1" },
+    "repo_id": { "type": "string" },
+    "profile": { "type": "string" },
+    "scanner_run_id": { "type": "string" },
+    "summary": {
+      "type": "object",
+      "required": [
+        "human_findings_count",
+        "scanner_findings_count",
+        "detectable_human_findings_count",
+        "matched_findings_count",
+        "missed_detectable_findings_count",
+        "scanner_only_findings_count",
+        "critical_miss_rate",
+        "recall_detectable",
+        "material_precision",
+        "top_blocker_agreement",
+        "evidence_traceability",
+        "confidence_calibration",
+        "review_preparation_acceleration"
+      ],
+      "properties": {
+        "human_findings_count": { "type": "integer" },
+        "scanner_findings_count": { "type": "integer" },
+        "detectable_human_findings_count": { "type": "integer" },
+        "matched_findings_count": { "type": "integer" },
+        "missed_detectable_findings_count": { "type": "integer" },
+        "scanner_only_findings_count": { "type": "integer" },
+        "critical_miss_rate": { "type": "number" },
+        "recall_detectable": { "type": "number" },
+        "material_precision": { "type": "number" },
+        "top_blocker_agreement": { "type": "number" },
+        "evidence_traceability": { "type": "number" },
+        "confidence_calibration": { "type": "object" },
+        "review_preparation_acceleration": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "matched_findings": { "type": "array" },
+    "missed_detectable_findings": { "type": "array" },
+    "non_detectable_human_findings": { "type": "array" },
+    "scanner_only_findings": { "type": "array" },
+    "triage_required": { "type": "array" },
+    "recommendations": { "type": "array" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "enterprise-whitebox-accepted-warning",
+  "schema_version": "0.1",
+  "warning_id": "WARN-SAMPLE-001",
+  "source": "release_gate",
+  "description": "Portfolio validation evidence is not provided for this internal validation sample.",
+  "reason_accepted": "The sample release is limited to internal validation workflow testing.",
+  "accepted_by_role": "Release Manager",
+  "expires_at": "2026-08-09"
+}

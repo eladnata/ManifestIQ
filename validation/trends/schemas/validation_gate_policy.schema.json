@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Validation Gate Policy",
+  "type": "object",
+  "required": ["schema", "schema_version", "policy_id", "thresholds", "blocking_conditions", "warning_conditions"],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-validation-gate-policy" },
+    "schema_version": { "const": "0.1" },
+    "policy_id": { "type": "string" },
+    "thresholds": {
+      "type": "object",
+      "required": [
+        "critical_miss_rate_max",
+        "evidence_traceability_min",
+        "detectable_recall_min",
+        "detectable_recall_max_drop",
+        "top_blocker_agreement_min",
+        "top_blocker_agreement_max_drop",
+        "material_precision_after_triage_min",
+        "material_precision_after_triage_max_drop",
+        "scanner_only_triage_growth_warning",
+        "domain_metric_max_drop",
+        "rule_family_metric_max_drop"
+      ],
+      "properties": {
+        "critical_miss_rate_max": { "type": "number" },
+        "evidence_traceability_min": { "type": "number" },
+        "detectable_recall_min": { "type": "number" },
+        "detectable_recall_max_drop": { "type": "number" },
+        "top_blocker_agreement_min": { "type": "number" },
+        "top_blocker_agreement_max_drop": { "type": "number" },
+        "material_precision_after_triage_min": { "type": "number" },
+        "material_precision_after_triage_max_drop": { "type": "number" },
+        "scanner_only_triage_growth_warning": { "type": "number" },
+        "domain_metric_max_drop": { "type": "number" },
+        "rule_family_metric_max_drop": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "blocking_conditions": { "type": "array", "items": { "type": "string" } },
+    "warning_conditions": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

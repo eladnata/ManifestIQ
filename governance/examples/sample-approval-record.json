@@ -1,0 +1,14 @@
+{
+  "schema": "enterprise-whitebox-approval-record",
+  "schema_version": "0.1",
+  "release_id": "sample-release-v0.1",
+  "decision": "Approved for internal validation",
+  "approved_by_role": "Release Manager",
+  "approval_date": "2026-07-09",
+  "conditions": [
+    "Use only for internal validation workflow testing."
+  ],
+  "notes": [
+    "This sample approval record is not a production approval."
+  ]
+}

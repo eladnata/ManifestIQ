@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Validation Trend Report",
+  "type": "object",
+  "required": [
+    "schema",
+    "schema_version",
+    "trend_id",
+    "baseline",
+    "candidate",
+    "summary",
+    "blocking_regressions",
+    "warnings",
+    "by_domain_deltas",
+    "by_rule_family_deltas",
+    "by_profile_deltas",
+    "recommendations",
+    "limitations"
+  ],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-validation-trend-report" },
+    "schema_version": { "const": "0.1" },
+    "trend_id": { "type": "string" },
+    "baseline": { "type": "object" },
+    "candidate": { "type": "object" },
+    "summary": {
+      "type": "object",
+      "required": ["gate_status", "blocking_regressions_count", "warnings_count", "metric_deltas"],
+      "properties": {
+        "gate_status": { "type": "string", "enum": ["Passed", "Failed", "Warning"] },
+        "blocking_regressions_count": { "type": "integer" },
+        "warnings_count": { "type": "integer" },
+        "metric_deltas": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "blocking_regressions": { "type": "array" },
+    "warnings": { "type": "array" },
+    "by_domain_deltas": { "type": "array" },
+    "by_rule_family_deltas": { "type": "array" },
+    "by_profile_deltas": { "type": "array" },
+    "recommendations": { "type": "array" },
+    "limitations": { "type": "array" }
+  },
+  "additionalProperties": false
+}

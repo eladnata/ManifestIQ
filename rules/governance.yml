@@ -1,0 +1,36 @@
+rules:
+  - rule_id: GOV-001
+    name: Missing Owner Evidence
+    category: Governance
+    severity: High
+    applies_to_profiles: [team-use, department-use, enterprise, finance-sox, production-critical]
+    decision: Block
+    requires_approval_from: [Governance]
+    score_impact: {Governance: -20}
+    remediation:
+      - Add business and technical owner evidence
+
+  - rule_id: GOV-BASELINE-001
+    name: Baseline Rule Disabled
+    category: Governance
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [CISO, Security Architecture]
+    score_impact: {Governance: -20}
+    remediation:
+      - Remove the baseline rule disablement or attach complete approval evidence
+      - Re-run the scanner
+
+  - rule_id: GOV-RULEBOOK-001
+    name: Custom Rule Attempted Baseline Override
+    category: Governance
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Security Architecture]
+    score_impact: {Governance: -20}
+    remediation:
+      - Assign a unique custom rule ID
+      - Keep baseline rules immutable
+      - Re-run the scanner

@@ -1,0 +1,42 @@
+profile: enterprise
+version: 0.2.0
+description: Strict enterprise assurance profile for CISO/CTO review.
+required_analyzers:
+  - secrets
+  - dependencies
+  - sast
+  - config
+  - hidden_ai_model_detector
+  - documentation
+  - data_risk
+  - sox_detector
+  - maintainability
+  - operational
+  - licenses
+  - project_structure
+  - delivery_readiness
+blocking_conditions:
+  - hardcoded secrets
+  - critical SAST findings
+  - critical vulnerable dependencies
+  - undeclared AI/model usage
+  - missing owner evidence
+  - missing architecture/runbook/deployment evidence
+  - missing logging indicators
+  - missing monitoring evidence
+  - missing runtime configuration separation
+  - missing operational support model
+  - missing project structure evidence
+  - missing enterprise delivery evidence
+  - unknown or restrictive dependency license
+  - binary artifact without license evidence
+  - missing local SBOM evidence
+minimum_documentation:
+  - README
+  - OWNER
+  - CODEOWNERS
+  - ARCHITECTURE
+  - DEPLOYMENT
+  - RUNBOOK
+  - SUPPORT
+  - SECURITY_NOTES

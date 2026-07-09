@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Release Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "release_id",
+    "scanner_version",
+    "ruleset_version",
+    "ruleset_sha256",
+    "created_at",
+    "evidence_inputs",
+    "known_limitations",
+    "release_notes"
+  ],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-release-manifest" },
+    "schema_version": { "const": "0.1" },
+    "release_id": { "type": "string", "minLength": 1 },
+    "scanner_version": { "type": "string" },
+    "ruleset_version": { "type": "string" },
+    "ruleset_sha256": { "type": "string" },
+    "created_at": { "type": "string" },
+    "evidence_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "governance_check_report",
+        "test_result_summary",
+        "sample_scan_summary",
+        "adversarial_validation_report",
+        "goldset_comparison_report",
+        "portfolio_validation_report",
+        "validation_trend_report",
+        "accepted_warnings",
+        "approval_record"
+      ],
+      "properties": {
+        "governance_check_report": { "type": ["string", "null"] },
+        "test_result_summary": { "type": ["string", "null"] },
+        "sample_scan_summary": { "type": ["string", "null"] },
+        "adversarial_validation_report": { "type": ["string", "null"] },
+        "goldset_comparison_report": { "type": ["string", "null"] },
+        "portfolio_validation_report": { "type": ["string", "null"] },
+        "validation_trend_report": { "type": ["string", "null"] },
+        "accepted_warnings": { "type": "array", "items": { "type": "string" } },
+        "approval_record": { "type": ["string", "null"] }
+      }
+    },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+    "release_notes": { "type": "array", "items": { "type": "string" } }
+  }
+}

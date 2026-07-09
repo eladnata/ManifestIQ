@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Release Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "generated_at",
+    "scanner_version",
+    "ruleset_version",
+    "governance_check_status",
+    "test_status",
+    "validation_status",
+    "release_gate_status",
+    "release_decision",
+    "evidence_files",
+    "known_limitations",
+    "recommendations"
+  ],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-release-evidence" },
+    "schema_version": { "const": "0.1" },
+    "generated_at": { "type": "string" },
+    "scanner_version": { "type": "string" },
+    "ruleset_version": { "type": "string" },
+    "governance_check_status": { "type": "string", "enum": ["Passed", "Warning", "Failed"] },
+    "test_status": { "type": "string", "enum": ["unknown", "passed", "failed", "missing"] },
+    "validation_status": { "type": "string", "enum": ["unknown", "passed", "warning", "failed", "missing"] },
+    "release_gate_status": { "type": "string", "enum": ["Not Evaluated", "Passed", "Warning", "Failed"] },
+    "release_decision": {
+      "type": "string",
+      "enum": [
+        "Not Requested",
+        "Blocked",
+        "Conditional",
+        "Approved for internal validation",
+        "Approved for pilot",
+        "Approved for production use"
+      ]
+    },
+    "evidence_files": { "type": "array", "items": { "type": "string" } },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+    "recommendations": { "type": "array", "items": { "type": "string" } }
+  }
+}

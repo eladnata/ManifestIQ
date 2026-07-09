@@ -1,0 +1,18 @@
+[project]
+name = "enterprise-whitebox-scanner"
+version = "0.1.0"
+description = "Local deterministic Enterprise Readiness Scanner"
+requires-python = ">=3.11"
+dependencies = [
+  "typer>=0.12",
+  "PyYAML>=6.0",
+  "Jinja2>=3.1",
+  "rich>=13.0"
+]
+
+[project.scripts]
+scanner = "scanner.app.cli:app"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

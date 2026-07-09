@@ -1,0 +1,25 @@
+rules:
+  - rule_id: MAINT-001
+    name: Large File
+    category: Maintainability
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Advisory
+    score_impact: {Maintainability: -10}
+
+  - rule_id: MAINT-002
+    name: Long Source File
+    category: Maintainability
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Advisory
+    score_impact: {Maintainability: -10}
+
+  - rule_id: MAINT-003
+    name: No Tests Detected
+    category: Maintainability
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, production-critical]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead]
+    score_impact: {Maintainability: -20}

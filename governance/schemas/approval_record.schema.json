@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Approval Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "release_id",
+    "decision",
+    "approved_by_role",
+    "approval_date",
+    "conditions",
+    "notes"
+  ],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-approval-record" },
+    "schema_version": { "const": "0.1" },
+    "release_id": { "type": "string", "minLength": 1 },
+    "decision": {
+      "type": "string",
+      "enum": ["Blocked", "Conditional", "Approved for internal validation", "Approved for pilot", "Approved for production use"]
+    },
+    "approved_by_role": {
+      "type": "string",
+      "enum": ["Product Owner", "Engineering Maintainer", "AppSec", "CISO", "CTO", "Architecture", "SOX", "ITGC", "Release Manager"]
+    },
+    "approval_date": { "type": "string" },
+    "conditions": { "type": "array", "items": { "type": "string" } },
+    "notes": { "type": "array", "items": { "type": "string" } }
+  }
+}

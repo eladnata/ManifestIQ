@@ -1,0 +1,17 @@
+{
+  "schema": "enterprise-whitebox-reviewer-worksheet",
+  "schema_version": "0.1",
+  "repo_id": "sample-insecure-python",
+  "scanner_run_id": "sample-run",
+  "reviewer_id": "reviewer-appsec-1",
+  "reviewer_role": "AppSec",
+  "scanner_report_usefulness_score": 4,
+  "decision_packet_clarity_score": 4,
+  "evidence_quality_score": 4,
+  "top_blocker_agreement": "Agree",
+  "missed_material_findings": [],
+  "false_positive_findings": [],
+  "scanner_only_valid_findings": [],
+  "estimated_time_saved_minutes": 75,
+  "comments": ["Example worksheet for deterministic local validation."]
+}

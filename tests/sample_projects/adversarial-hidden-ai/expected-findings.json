@@ -1,0 +1,30 @@
+{
+  "fixture": "adversarial-hidden-ai",
+  "profile": "enterprise",
+  "expected_findings": [
+    {
+      "rule_id": "AI-001",
+      "severity": "High",
+      "decision_impact": "Mandatory Review",
+      "file_contains": "requirements.txt",
+      "critical": false,
+      "description": "AI dependency should be detected from dependency manifest."
+    },
+    {
+      "rule_id": "AI-002",
+      "severity": "Critical",
+      "decision_impact": "Block",
+      "file_contains": "app.py",
+      "critical": true,
+      "description": "External AI provider endpoint should be detected."
+    },
+    {
+      "rule_id": "AI-003",
+      "severity": "Critical",
+      "decision_impact": "Block",
+      "file_contains": "weights.gguf",
+      "critical": true,
+      "description": "Local model artifact should be detected."
+    }
+  ]
+}

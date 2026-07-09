@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Test Result Summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "command",
+    "status",
+    "tests_passed",
+    "tests_failed",
+    "duration_seconds",
+    "generated_at",
+    "notes"
+  ],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-test-result-summary" },
+    "schema_version": { "const": "0.1" },
+    "command": { "type": "string" },
+    "status": { "type": "string", "enum": ["passed", "failed", "unknown"] },
+    "tests_passed": { "type": "integer", "minimum": 0 },
+    "tests_failed": { "type": "integer", "minimum": 0 },
+    "tests_skipped": { "type": "integer", "minimum": 0 },
+    "tests_total": { "type": "integer", "minimum": 0 },
+    "duration_seconds": { "type": "number", "minimum": 0 },
+    "source": { "type": "string", "enum": ["junit_xml", "manual", "unknown"] },
+    "source_path": { "type": ["string", "null"] },
+    "generated_at": { "type": "string" },
+    "notes": { "type": "array", "items": { "type": "string" } }
+  }
+}

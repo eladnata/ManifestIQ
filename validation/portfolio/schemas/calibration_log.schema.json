@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Calibration Log",
+  "type": "object",
+  "required": ["schema", "schema_version", "calibration_id", "date", "ruleset_version_before", "ruleset_version_after", "reason", "evidence", "decision"],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-calibration-log" },
+    "schema_version": { "const": "0.1" },
+    "calibration_id": { "type": "string" },
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "ruleset_version_before": { "type": "string" },
+    "ruleset_version_after": { "type": ["string", "null"] },
+    "reason": { "type": "string" },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["repo_id", "finding_id", "metric", "observation"],
+        "properties": {
+          "repo_id": { "type": "string" },
+          "finding_id": { "type": ["string", "null"] },
+          "metric": { "type": "string" },
+          "observation": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "decision": {
+      "type": "object",
+      "required": ["change_type", "description", "approved_by_role"],
+      "properties": {
+        "change_type": {
+          "type": "string",
+          "enum": ["rule_threshold", "severity", "confidence_policy", "report_compression", "documentation_only", "no_change"]
+        },
+        "description": { "type": "string" },
+        "approved_by_role": {
+          "type": "string",
+          "enum": ["AppSec", "CISO", "CTO", "Architecture", "DevOps", "SOX", "ITGC", "Other"]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Portfolio Validation Report",
+  "type": "object",
+  "required": [
+    "schema",
+    "schema_version",
+    "portfolio_id",
+    "scanner_version",
+    "ruleset_version",
+    "summary",
+    "by_domain",
+    "by_rule_family",
+    "by_profile",
+    "confidence_calibration",
+    "scanner_only_triage_summary",
+    "reviewer_agreement_summary",
+    "recommendations",
+    "limitations"
+  ],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-portfolio-validation-report" },
+    "schema_version": { "const": "0.1" },
+    "portfolio_id": { "type": "string" },
+    "scanner_version": { "type": "string" },
+    "ruleset_version": { "type": "string" },
+    "summary": { "type": "object" },
+    "by_domain": { "type": "array" },
+    "by_rule_family": { "type": "array" },
+    "by_profile": { "type": "array" },
+    "confidence_calibration": { "type": "object" },
+    "scanner_only_triage_summary": { "type": "object" },
+    "reviewer_agreement_summary": { "type": "object" },
+    "recommendations": { "type": "array" },
+    "limitations": { "type": "array" }
+  },
+  "additionalProperties": false
+}

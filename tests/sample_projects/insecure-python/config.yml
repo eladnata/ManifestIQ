@@ -1,0 +1,5 @@
+debug: true
+allow_all_origins: true
+verify_ssl: false
+host: 0.0.0.0
+admin: admin

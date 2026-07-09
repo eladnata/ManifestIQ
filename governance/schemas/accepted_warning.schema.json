@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Accepted Warning",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "warning_id",
+    "source",
+    "description",
+    "reason_accepted",
+    "accepted_by_role",
+    "expires_at"
+  ],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-accepted-warning" },
+    "schema_version": { "const": "0.1" },
+    "warning_id": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "string",
+      "enum": ["trend_gate", "portfolio_validation", "governance_check", "release_gate", "other"]
+    },
+    "description": { "type": "string" },
+    "reason_accepted": { "type": "string" },
+    "accepted_by_role": {
+      "type": "string",
+      "enum": ["Product Owner", "Engineering Maintainer", "AppSec", "CISO", "CTO", "Architecture", "SOX", "ITGC", "Release Manager"]
+    },
+    "expires_at": { "type": ["string", "null"] }
+  }
+}

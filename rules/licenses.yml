@@ -1,0 +1,195 @@
+rules:
+  - rule_id: LIC-001
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Repository License File
+    category: Governance
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Legal]
+    score_impact: {Governance: -10}
+    remediation: [Add repository license declaration or internal-use license notice]
+
+  - rule_id: LIC-002
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Third-Party Notices
+    category: Governance
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Legal, ITGC]
+    score_impact: {Governance: -20}
+    remediation: [Add third-party notices or OSS attribution evidence]
+
+  - rule_id: LIC-003
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Dependency Missing License
+    category: License Risk
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Legal, Security]
+    score_impact: {License Risk: -20}
+    remediation: [Add local license evidence or replace dependency]
+
+  - rule_id: LIC-004
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Dependency Has Unknown License
+    category: License Risk
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Legal]
+    score_impact: {License Risk: -20}
+    remediation: [Review unknown license with Legal]
+
+  - rule_id: LIC-005
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Restrictive License Detected
+    category: License Risk
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Legal, Security]
+    score_impact: {License Risk: -20}
+    remediation: [Obtain Legal approval for restrictive license use]
+
+  - rule_id: LIC-006
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Strong Copyleft License Requires Review
+    category: License Risk
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Legal]
+    score_impact: {License Risk: -20}
+    remediation: [Review strong copyleft obligations with Legal]
+
+  - rule_id: LIC-007
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: AGPL/SSPL License Requires Enterprise Review
+    category: License Risk
+    severity: Critical
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Block
+    requires_approval_from: [Legal, CISO]
+    score_impact: {License Risk: -40}
+    remediation: [Obtain Legal and CISO approval or replace dependency]
+
+  - rule_id: LIC-008
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Ambiguous License Expression
+    category: License Risk
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Legal]
+    score_impact: {License Risk: -20}
+    remediation: [Resolve ambiguous license expression]
+
+  - rule_id: LIC-009
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Binary Artifact Without License Evidence
+    category: Supply Chain
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Legal, Security Architecture]
+    score_impact: {Supply Chain: -20}
+    remediation: [Remove binary artifact or attach provenance and license evidence]
+
+  - rule_id: LIC-010
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Vendored Dependency Without Attribution
+    category: Supply Chain
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Legal, Security]
+    score_impact: {Supply Chain: -20}
+    remediation: [Add attribution notices and provenance for vendored code]
+
+  - rule_id: LIC-011
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Dependency Manifest Without Lock File
+    category: Supply Chain
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead]
+    score_impact: {Supply Chain: -20}
+    remediation: [Commit lock files for dependency manifests]
+
+  - rule_id: LIC-012
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Lock File Without Matching Manifest
+    category: Supply Chain
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead]
+    score_impact: {Supply Chain: -10}
+    remediation: [Add matching manifest or remove stale lock file]
+
+  - rule_id: LIC-013
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Unpinned Dependency Version
+    category: Supply Chain
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead]
+    score_impact: {Supply Chain: -10}
+    remediation: [Pin dependency versions]
+
+  - rule_id: LIC-014
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Local SBOM Evidence
+    category: Governance
+    severity: Medium
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [ITGC]
+    score_impact: {Governance: -10}
+    remediation: [Generate local-sbom.json in evidence package]
+
+  - rule_id: LIC-015
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Custom License Requires Review
+    category: License Risk
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Legal]
+    score_impact: {License Risk: -20}
+    remediation: [Attach Legal approval for custom license use]

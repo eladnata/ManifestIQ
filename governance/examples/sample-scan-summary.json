@@ -1,0 +1,16 @@
+{
+  "schema": "enterprise-whitebox-sample-scan-summary",
+  "schema_version": "0.1",
+  "command": "python -m scanner scan-folder --path tests/sample_projects/insecure-python --output output --profile finance-sox",
+  "profile": "finance-sox",
+  "decision": "Not Approved",
+  "score": 0,
+  "critical": 1,
+  "high": 1,
+  "evidence_package_path": "output/evidence-package",
+  "manifest_path": "output/evidence-package/manifest.json",
+  "status": "passed",
+  "notes": [
+    "Sample scan summary confirms scan execution, not release approval."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "enterprise-whitebox-calibration-log",
+  "schema_version": "0.1",
+  "calibration_id": "CAL-2026-0001",
+  "date": "2026-07-09",
+  "ruleset_version_before": "sample-ruleset",
+  "ruleset_version_after": null,
+  "reason": "Sample calibration log for deterministic local validation.",
+  "evidence": [
+    {
+      "repo_id": "sample-insecure-python",
+      "finding_id": null,
+      "metric": "top_blocker_agreement",
+      "observation": "Reviewer agreed with the top blocker in the sample worksheet."
+    }
+  ],
+  "decision": {
+    "change_type": "documentation_only",
+    "description": "No rule change required for the sample calibration event.",
+    "approved_by_role": "AppSec"
+  }
+}

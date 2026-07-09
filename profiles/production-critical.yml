@@ -1,0 +1,44 @@
+profile: production-critical
+version: 0.2.0
+description: Strictest operational assurance profile for production-critical systems.
+inherits: enterprise
+required_analyzers:
+  - secrets
+  - dependencies
+  - sast
+  - config
+  - hidden_ai_model_detector
+  - documentation
+  - data_risk
+  - sox_detector
+  - maintainability
+  - operational
+  - licenses
+  - project_structure
+  - delivery_readiness
+blocking_conditions:
+  - all enterprise blocking conditions
+  - missing rollback procedure
+  - missing logging evidence
+  - missing monitoring or health check
+  - missing backup/recovery documentation
+  - missing incident response notes
+  - missing runtime configuration separation
+  - missing operational support ownership
+  - missing resilience/error handling evidence
+  - restrictive, unknown, or missing dependency license
+  - binary artifact without license evidence
+  - missing project structure evidence
+  - missing delivery readiness evidence
+  - unresolved high security findings without formal exception
+minimum_documentation:
+  - README
+  - OWNER
+  - CODEOWNERS
+  - ARCHITECTURE
+  - DEPLOYMENT
+  - RUNBOOK
+  - ROLLBACK
+  - MONITORING
+  - BACKUP_RESTORE
+  - INCIDENT_RESPONSE

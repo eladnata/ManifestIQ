@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Release Checklist",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "release_id",
+    "candidate_version",
+    "checks",
+    "release_decision",
+    "approver_role"
+  ],
+  "properties": {
+    "release_id": { "type": "string", "minLength": 1 },
+    "candidate_version": { "type": "string" },
+    "checks": {
+      "type": "object",
+      "additionalProperties": { "type": "boolean" },
+      "properties": {
+        "tests_passed": { "type": "boolean" },
+        "sample_scan_passed": { "type": "boolean" },
+        "evidence_package_generated": { "type": "boolean" },
+        "manifest_complete": { "type": "boolean" },
+        "adversarial_validation_passed": { "type": "boolean" },
+        "gold_set_validation_completed_where_available": { "type": "boolean" },
+        "portfolio_validation_completed_where_available": { "type": "boolean" },
+        "trend_gate_passed_or_warning_accepted": { "type": "boolean" },
+        "rule_governance_checked": { "type": "boolean" },
+        "baseline_rules_protected": { "type": "boolean" },
+        "skipped_analyzers_documented": { "type": "boolean" },
+        "known_limitations_updated": { "type": "boolean" },
+        "changelog_updated": { "type": "boolean" },
+        "adrs_updated_if_needed": { "type": "boolean" },
+        "documentation_updated": { "type": "boolean" },
+        "release_decision_recorded": { "type": "boolean" }
+      }
+    },
+    "release_decision": {
+      "type": "string",
+      "enum": [
+        "Blocked",
+        "Conditional",
+        "Approved for internal validation",
+        "Approved for pilot",
+        "Approved for production use"
+      ]
+    },
+    "approver_role": { "type": "string" },
+    "accepted_warnings": { "type": "array", "items": { "type": "string" } },
+    "known_limitations": { "type": "array", "items": { "type": "string" } }
+  }
+}

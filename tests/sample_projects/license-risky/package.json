@@ -1,0 +1,8 @@
+{
+  "name": "license-risky",
+  "version": "0.1.0",
+  "dependencies": {
+    "missing-license-lib": "1.0.0",
+    "openai": "1.0.0"
+  }
+}

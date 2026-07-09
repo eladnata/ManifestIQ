@@ -1,0 +1,195 @@
+rules:
+  - rule_id: OPS-001
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: No Logging Evidence
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations]
+    score_impact: {Operations: -20}
+    remediation: [Add application logging and document operational log access]
+
+  - rule_id: OPS-002
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: No Audit Logging Evidence
+    category: Operations
+    severity: High
+    applies_to_profiles: [finance-sox, production-critical]
+    decision: Mandatory Review
+    requires_approval_from: [SOX, ITGC]
+    score_impact: {Operations: -20}
+    remediation: [Add audit logging for control-relevant events]
+
+  - rule_id: OPS-003
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: No Monitoring Evidence
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations]
+    score_impact: {Operations: -20}
+    remediation: [Add monitoring, metrics, observability, dashboard, or alerting evidence]
+
+  - rule_id: OPS-004
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: No Health Check Evidence
+    category: Operations
+    severity: High
+    applies_to_profiles: [production-critical]
+    decision: Block
+    requires_approval_from: [Operations]
+    score_impact: {Operations: -40}
+    remediation: [Add health, readiness, or liveness check evidence]
+
+  - rule_id: OPS-005
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: No Backup/Restore Evidence
+    category: Operations
+    severity: High
+    applies_to_profiles: [production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations, ITGC]
+    score_impact: {Operations: -20}
+    remediation: [Add backup and restore procedure with RPO/RTO evidence]
+
+  - rule_id: OPS-006
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: No Incident Response Evidence
+    category: Operations
+    severity: High
+    applies_to_profiles: [production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations, Security]
+    score_impact: {Operations: -20}
+    remediation: [Add incident response, escalation, on-call, or postmortem process evidence]
+
+  - rule_id: OPS-007
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: No Runtime Configuration Separation
+    category: Configuration
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [DevOps, Security Architecture]
+    score_impact: {Configuration: -20}
+    remediation: [Add runtime configuration separation and environment template evidence]
+
+  - rule_id: OPS-008
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Containerized Service Without Health Check
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations, DevOps]
+    score_impact: {Operations: -20}
+    remediation: [Add Docker HEALTHCHECK or Kubernetes readiness/liveness probes]
+
+  - rule_id: OPS-009
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Data Storage Without Recovery Procedure
+    category: Operations
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Operations, ITGC, Data Governance]
+    score_impact: {Operations: -20}
+    remediation: [Add backup, restore, retention, RPO, and RTO evidence]
+
+  - rule_id: OPS-010
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: No Error Handling Evidence
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead]
+    score_impact: {Operations: -20}
+    remediation: [Add exception handling, retries, timeouts, or documented resilience behavior]
+
+  - rule_id: OPS-011
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Network Calls Without Timeout Evidence
+    category: Operations
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead, Operations]
+    score_impact: {Operations: -10}
+    remediation: [Add explicit timeout handling for network/API calls]
+
+  - rule_id: OPS-012
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: No Operational Support Model
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations, ITGC]
+    score_impact: {Operations: -20}
+    remediation: [Add operational support owner, contact, escalation, or on-call evidence]
+
+  - rule_id: OPS-013
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Deployment Artifacts Without Runbook
+    category: Operations
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Operations, Enterprise Architecture]
+    score_impact: {Operations: -20}
+    remediation: [Align deployment artifacts with runbook and rollback documentation]
+
+  - rule_id: OPS-014
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Sensitive Data Logging Indicator
+    category: Data Protection
+    severity: Critical
+    applies_to_profiles: [all]
+    decision: Block
+    requires_approval_from: [Security, Data Governance]
+    score_impact: {Data Protection: -40}
+    remediation: [Remove sensitive values from logs and mask sensitive fields]
+
+  - rule_id: OPS-015
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Production Configuration Committed
+    category: Configuration
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [DevOps, Security Architecture]
+    score_impact: {Configuration: -20}
+    remediation: [Remove committed runtime configuration and use environment-specific deployment settings]

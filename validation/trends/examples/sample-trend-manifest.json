@@ -1,0 +1,10 @@
+{
+  "schema": "enterprise-whitebox-validation-trend-manifest",
+  "schema_version": "0.1",
+  "trend_id": "pilot-trend-v0.1",
+  "description": "Portfolio validation trend across scanner and ruleset versions.",
+  "baseline_report_path": "portfolio-output/portfolio-validation-report.json",
+  "candidate_report_path": "portfolio-output/portfolio-validation-report.json",
+  "comparison_mode": "baseline_vs_candidate",
+  "created_at": "2026-07-09"
+}

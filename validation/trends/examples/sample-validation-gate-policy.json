@@ -1,0 +1,31 @@
+{
+  "schema": "enterprise-whitebox-validation-gate-policy",
+  "schema_version": "0.1",
+  "policy_id": "default-strict-validation-gate",
+  "thresholds": {
+    "critical_miss_rate_max": 0.0,
+    "evidence_traceability_min": 1.0,
+    "detectable_recall_min": 0.8,
+    "detectable_recall_max_drop": 0.05,
+    "top_blocker_agreement_min": 0.75,
+    "top_blocker_agreement_max_drop": 0.05,
+    "material_precision_after_triage_min": 0.75,
+    "material_precision_after_triage_max_drop": 0.1,
+    "scanner_only_triage_growth_warning": 0.25,
+    "domain_metric_max_drop": 0.1,
+    "rule_family_metric_max_drop": 0.1
+  },
+  "blocking_conditions": [
+    "critical_miss_rate_above_threshold",
+    "evidence_traceability_below_threshold",
+    "detectable_recall_below_threshold",
+    "detectable_recall_drop"
+  ],
+  "warning_conditions": [
+    "top_blocker_agreement_drop",
+    "material_precision_drop",
+    "scanner_only_triage_growth",
+    "domain_regression",
+    "rule_family_regression"
+  ]
+}

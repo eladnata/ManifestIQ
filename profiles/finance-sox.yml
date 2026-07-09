@@ -1,0 +1,41 @@
+profile: finance-sox
+version: 0.2.0
+description: Strict finance/SOX assurance profile with mandatory control review gates.
+inherits: enterprise
+required_analyzers:
+  - secrets
+  - dependencies
+  - sast
+  - config
+  - hidden_ai_model_detector
+  - documentation
+  - data_risk
+  - sox_detector
+  - maintainability
+  - operational
+  - licenses
+  - project_structure
+  - delivery_readiness
+blocking_conditions:
+  - all enterprise blocking conditions
+  - missing SOX impact assessment when finance indicators are present
+  - missing control owner documentation
+  - missing change management evidence
+  - missing access control evidence
+  - missing audit logging evidence
+  - missing operational support or escalation evidence
+  - missing backup/restore evidence when financial data exists
+  - committed financial data files without justification
+  - missing delivery readiness evidence
+  - missing data flow documentation
+  - unmanaged component license evidence
+mandatory_review_indicators:
+  - SAP
+  - journal
+  - ledger
+  - reconciliation
+  - payment
+  - invoice
+  - billing
+  - posting
+  - revenue

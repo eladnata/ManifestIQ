@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Reviewer Worksheet",
+  "type": "object",
+  "required": [
+    "schema",
+    "schema_version",
+    "repo_id",
+    "scanner_run_id",
+    "reviewer_id",
+    "reviewer_role",
+    "scanner_report_usefulness_score",
+    "decision_packet_clarity_score",
+    "evidence_quality_score",
+    "top_blocker_agreement",
+    "missed_material_findings",
+    "false_positive_findings",
+    "scanner_only_valid_findings",
+    "estimated_time_saved_minutes",
+    "comments"
+  ],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-reviewer-worksheet" },
+    "schema_version": { "const": "0.1" },
+    "repo_id": { "type": "string" },
+    "scanner_run_id": { "type": "string" },
+    "reviewer_id": { "type": "string" },
+    "reviewer_role": { "type": "string" },
+    "scanner_report_usefulness_score": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "decision_packet_clarity_score": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "evidence_quality_score": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "top_blocker_agreement": { "type": "string", "enum": ["Agree", "Partially Agree", "Disagree"] },
+    "missed_material_findings": { "type": "array" },
+    "false_positive_findings": { "type": "array" },
+    "scanner_only_valid_findings": { "type": "array" },
+    "estimated_time_saved_minutes": { "type": "number", "minimum": 0 },
+    "comments": { "type": "array" }
+  },
+  "additionalProperties": false
+}

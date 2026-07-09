@@ -1,0 +1,67 @@
+rules:
+  - rule_id: AI-001
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Undeclared AI/ML Dependency
+    category: AI Model Risk
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Security Architecture, Data Governance, CISO]
+    score_impact: {AI Model Risk: -20}
+    remediation:
+      - Declare AI/model usage in project documentation
+      - Add model/provider inventory
+      - Obtain Security Architecture, Data Governance, and CISO approval before enterprise use
+
+  - rule_id: AI-002
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: External AI API or Prompt Indicator
+    category: AI Model Risk
+    severity: Critical
+    applies_to_profiles: [all]
+    decision: Block
+    requires_approval_from: [Security Architecture, Data Governance, CISO]
+    score_impact: {AI Model Risk: -40}
+    remediation:
+      - Declare external AI/API usage
+      - Document data sent to the provider
+      - Complete provider risk review and CISO approval
+      - Re-run the scanner
+
+  - rule_id: AI-003
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Local Model Artifact or Embedded Weights
+    category: AI Model Risk
+    severity: Critical
+    applies_to_profiles: [all]
+    decision: Block
+    requires_approval_from: [Security Architecture, Data Governance, CISO]
+    score_impact: {AI Model Risk: -40}
+    remediation:
+      - Inventory model artifacts and source provenance
+      - Document model architecture and approved use
+      - Remove undeclared model weights or obtain approval
+      - Re-run the scanner
+
+  - rule_id: AI-004
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Embedding or Vector Database Usage
+    category: AI Model Risk
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Security Architecture, Data Governance, CISO]
+    score_impact: {AI Model Risk: -20}
+    remediation:
+      - Document embedding/vector database use
+      - Add data classification and retention evidence
+      - Obtain Data Governance approval
+      - Re-run the scanner

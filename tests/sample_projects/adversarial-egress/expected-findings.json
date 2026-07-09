@@ -1,0 +1,21 @@
+{
+  "fixture": "adversarial-egress",
+  "profile": "enterprise",
+  "expected_findings": [
+    {
+      "rule_id": "OPS-011",
+      "severity": "Medium",
+      "decision_impact": "Conditional",
+      "file_contains": "client.py",
+      "critical": false,
+      "description": "Network call without timeout should be detected."
+    },
+    {
+      "rule_id": "DATA-002",
+      "severity": "Medium",
+      "file_contains": "client.py",
+      "critical": false,
+      "description": "Sensitive data indicator near outbound logic should remain visible."
+    }
+  ]
+}

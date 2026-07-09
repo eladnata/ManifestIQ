@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Enterprise Whitebox Scanner Only Triage",
+  "type": "object",
+  "required": ["schema", "schema_version", "repo_id", "scanner_run_id", "triaged_by", "triage_items"],
+  "properties": {
+    "schema": { "const": "enterprise-whitebox-scanner-only-triage" },
+    "schema_version": { "const": "0.1" },
+    "repo_id": { "type": "string" },
+    "scanner_run_id": { "type": "string" },
+    "triaged_by": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reviewer_id", "role"],
+        "properties": {
+          "reviewer_id": { "type": "string" },
+          "role": {
+            "type": "string",
+            "enum": ["AppSec", "CISO", "CTO", "Architecture", "DevOps", "SOX", "ITGC", "Legal", "Privacy", "Other"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "triage_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["scanner_finding_id", "rule_id", "domain", "severity", "label", "reason", "confidence"],
+        "properties": {
+          "scanner_finding_id": { "type": "string" },
+          "rule_id": { "type": ["string", "null"] },
+          "domain": { "type": "string" },
+          "severity": { "type": "string", "enum": ["Critical", "High", "Medium", "Low", "Info"] },
+          "label": {
+            "type": "string",
+            "enum": ["valid_material", "valid_minor", "duplicate", "acceptable_noise", "false_positive", "needs_human_review"]
+          },
+          "reason": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["High", "Medium", "Low"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,58 @@
+rules:
+  - rule_id: SEC-001
+    name: Hardcoded Secret Detected
+    category: Security
+    severity: Critical
+    applies_to_profiles: [all]
+    decision: Block
+    requires_approval_from: [Security]
+    score_impact: {Security: -40}
+    remediation:
+      - Remove secret from code
+      - Rotate credential
+      - Re-run scanner
+
+  - rule_id: SEC-002
+    name: Unsafe Dynamic Execution
+    category: Security
+    severity: Critical
+    applies_to_profiles: [all]
+    decision: Block
+    requires_approval_from: [Security]
+    score_impact: {Security: -40}
+
+  - rule_id: SEC-003
+    name: Command Injection Risk
+    category: Security
+    severity: Critical
+    applies_to_profiles: [all]
+    decision: Block
+    requires_approval_from: [Security]
+    score_impact: {Security: -40}
+
+  - rule_id: SEC-004
+    name: SQL Injection Risk
+    category: Security
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Security]
+    score_impact: {Security: -20}
+
+  - rule_id: SEC-005
+    name: Unsafe Deserialization
+    category: Security
+    severity: Critical
+    applies_to_profiles: [all]
+    decision: Block
+    requires_approval_from: [Security]
+    score_impact: {Security: -40}
+
+  - rule_id: SEC-006
+    name: Weak Crypto
+    category: Security
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Security]
+    score_impact: {Security: -20}

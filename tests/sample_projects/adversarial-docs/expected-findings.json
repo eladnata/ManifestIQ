@@ -1,0 +1,20 @@
+{
+  "fixture": "adversarial-docs",
+  "profile": "enterprise",
+  "expected_findings": [
+    {
+      "rule_id": "DEL-003",
+      "severity": "High",
+      "decision_impact": "Conditional",
+      "critical": false,
+      "description": "Misleading README must not satisfy missing runbook evidence."
+    },
+    {
+      "rule_id": "OPS-001",
+      "severity": "High",
+      "decision_impact": "Conditional",
+      "critical": false,
+      "description": "Print-only logging must not satisfy enterprise logging evidence."
+    }
+  ]
+}

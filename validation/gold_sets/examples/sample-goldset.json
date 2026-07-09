@@ -1,0 +1,71 @@
+{
+  "schema": "enterprise-whitebox-goldset",
+  "schema_version": "0.1",
+  "repo_id": "sample-insecure-python",
+  "repo_description": "Small deterministic sample repository used for local gold set comparison.",
+  "profile": "finance-sox",
+  "review_date": "2026-07-09",
+  "reviewers": [
+    {
+      "reviewer_id": "reviewer-appsec-1",
+      "role": "AppSec"
+    },
+    {
+      "reviewer_id": "reviewer-sox-1",
+      "role": "SOX"
+    }
+  ],
+  "human_ground_truth_findings": [
+    {
+      "human_finding_id": "HUM-001",
+      "domain": "Security",
+      "rule_id": "SEC-001",
+      "severity": "Critical",
+      "title": "Hardcoded secret in source",
+      "description": "A credential-like value is present in local source evidence.",
+      "file_path": "app.py",
+      "evidence_hint": "credential-like assignment",
+      "decision_impact": "Block",
+      "materiality": "material",
+      "expected_scanner_detectable": true
+    },
+    {
+      "human_finding_id": "HUM-002",
+      "domain": "SOX",
+      "rule_id": "SOX-001",
+      "severity": "High",
+      "title": "Finance indicators require SOX review",
+      "description": "Finance terms require human SOX review before approval.",
+      "file_path": "README.md",
+      "evidence_hint": "journal and vendor terms",
+      "decision_impact": "Mandatory Review",
+      "materiality": "material",
+      "expected_scanner_detectable": true
+    },
+    {
+      "human_finding_id": "HUM-003",
+      "domain": "Business Risk",
+      "rule_id": null,
+      "severity": "High",
+      "title": "Business owner has not accepted residual operational risk",
+      "description": "This requires management context outside static repository evidence.",
+      "file_path": null,
+      "evidence_hint": null,
+      "decision_impact": "Mandatory Review",
+      "materiality": "material",
+      "expected_scanner_detectable": false
+    }
+  ],
+  "human_top_blockers": [
+    {
+      "blocker_id": "BLK-001",
+      "title": "Hardcoded secret blocks approval",
+      "domain": "Security",
+      "severity": "Critical",
+      "decision_impact": "Block"
+    }
+  ],
+  "required_human_reviews": ["AppSec", "SOX"],
+  "manual_review_time_minutes": 120,
+  "notes": ["Example data only. No real sensitive information is included."]
+}

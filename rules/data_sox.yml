@@ -1,0 +1,27 @@
+rules:
+  - rule_id: DATA-001
+    name: Sensitive Data File Detected
+    category: Data Protection
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Data Owner, Security]
+    score_impact: {Data Protection: -20}
+
+  - rule_id: DATA-002
+    name: Sensitive Data Keyword Detected
+    category: Data Protection
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Advisory
+    requires_approval_from: [Data Owner]
+    score_impact: {Data Protection: -10}
+
+  - rule_id: SOX-001
+    name: Potential SOX/Finance Impact
+    category: SOX
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, production-critical]
+    decision: Mandatory Review
+    requires_approval_from: [SOX Owner]
+    score_impact: {SOX: -20}

@@ -1,0 +1,26 @@
+rules:
+  - rule_id: DEP-001
+    name: Missing Dependency Lock File
+    category: Supply Chain
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, production-critical]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead]
+    score_impact: {Supply Chain: -20}
+
+  - rule_id: DEP-002
+    name: Unbounded Dependency Version
+    category: Supply Chain
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead]
+    score_impact: {Supply Chain: -20}
+
+  - rule_id: DEP-003
+    name: Dependency Not Strictly Pinned
+    category: Supply Chain
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Advisory
+    score_impact: {Supply Chain: -10}

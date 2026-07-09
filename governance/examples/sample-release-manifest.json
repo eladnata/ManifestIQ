@@ -1,0 +1,29 @@
+{
+  "schema": "enterprise-whitebox-release-manifest",
+  "schema_version": "0.1",
+  "release_id": "sample-release-v0.1",
+  "scanner_version": "0.1.0",
+  "ruleset_version": "sample-ruleset",
+  "ruleset_sha256": "unknown",
+  "created_at": "2026-07-09",
+  "evidence_inputs": {
+    "governance_check_report": "governance-output/governance-check-report.json",
+    "test_result_summary": "governance-output/test_result_summary.json",
+    "sample_scan_summary": "governance/examples/sample-scan-summary.json",
+    "adversarial_validation_report": null,
+    "goldset_comparison_report": null,
+    "portfolio_validation_report": null,
+    "validation_trend_report": "trend-output/validation-trend-report.json",
+    "accepted_warnings": [
+      "governance/examples/sample-accepted-warning.json"
+    ],
+    "approval_record": "governance/examples/sample-approval-record.json"
+  },
+  "known_limitations": [
+    "Sample manifest is for workflow demonstration and internal validation only.",
+    "Portfolio and gold set evidence are intentionally not provided in this sample."
+  ],
+  "release_notes": [
+    "Demonstrates deterministic release evidence intake."
+  ]
+}

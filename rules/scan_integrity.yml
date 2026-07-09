@@ -1,0 +1,13 @@
+rules:
+  - rule_id: SCAN-001
+    name: Analyzer Failure
+    category: Scan Integrity
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Scanner Maintainer]
+    score_impact: {Scan Integrity: -20}
+    remediation:
+      - Review analyzer error details
+      - Fix the failing analyzer or document an approved exclusion
+      - Re-run the scanner

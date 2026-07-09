@@ -1,0 +1,156 @@
+rules:
+  - rule_id: ARCH-001
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: No Clear Entry Point
+    category: Architecture
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Enterprise Architecture]
+    score_impact: {Architecture: -20}
+    remediation: [Add a documented entry point or build descriptor]
+
+  - rule_id: ARCH-002
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Source Structure
+    category: Architecture
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Enterprise Architecture]
+    score_impact: {Architecture: -20}
+    remediation: [Move source code into a recognizable source directory]
+
+  - rule_id: ARCH-003
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Mixed Unrelated Applications
+    category: Architecture
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Enterprise Architecture]
+    score_impact: {Architecture: -20}
+    remediation: [Split unrelated applications or document repository boundaries]
+
+  - rule_id: ARCH-004
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Excessive Root-Level Files
+    category: Architecture
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Enterprise Architecture]
+    score_impact: {Architecture: -20}
+    remediation: [Organize root-level files into clear source, docs, scripts, and config directories]
+
+  - rule_id: ARCH-005
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Suspicious Hidden Directory
+    category: Architecture
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Enterprise Architecture]
+    score_impact: {Architecture: -10}
+    remediation: [Remove local hidden directories or document approved purpose]
+
+  - rule_id: ARCH-006
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Committed Binary Artifact
+    category: Architecture
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Security Architecture, Enterprise Architecture]
+    score_impact: {Architecture: -20}
+    remediation: [Remove binary artifacts or document approved provenance]
+
+  - rule_id: ARCH-007
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Committed Archive Artifact
+    category: Architecture
+    severity: High
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [Enterprise Architecture]
+    score_impact: {Architecture: -20}
+    remediation: [Remove archive artifacts from source control]
+
+  - rule_id: ARCH-008
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Committed Local Database File
+    category: Architecture
+    severity: High
+    applies_to_profiles: [all]
+    decision: Mandatory Review
+    requires_approval_from: [Data Governance, Security Architecture]
+    score_impact: {Architecture: -20}
+    remediation: [Remove local database files or provide approved sanitized fixtures]
+
+  - rule_id: ARCH-009
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Test Structure
+    category: Architecture
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [Engineering Lead]
+    score_impact: {Architecture: -20}
+    remediation: [Add automated tests under a recognizable tests directory]
+
+  - rule_id: ARCH-010
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing CI/CD Definition
+    category: Architecture
+    severity: High
+    applies_to_profiles: [enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [DevOps, ITGC]
+    score_impact: {Architecture: -20}
+    remediation: [Add CI/CD workflow or documented release procedure]
+
+  - rule_id: ARCH-011
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Missing Owner Metadata
+    category: Architecture
+    severity: High
+    applies_to_profiles: [team-use, department-use, enterprise, finance-sox, ai-enabled, production-critical]
+    decision: Conditional
+    requires_approval_from: [ITGC, Engineering Lead]
+    score_impact: {Architecture: -20}
+    remediation: [Add CODEOWNERS, OWNERS.md, or maintainers file]
+
+  - rule_id: ARCH-012
+    baseline: true
+    editable: false
+    disable_requires_approval: true
+    name: Excessive Unmanaged Scripts
+    category: Architecture
+    severity: Medium
+    applies_to_profiles: [all]
+    decision: Conditional
+    requires_approval_from: [DevOps]
+    score_impact: {Architecture: -10}
+    remediation: [Move scripts under managed scripts/tools directories and document ownership]
