@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ManifestIQ — Executive Decision Room (Design Mockup)</title>
+<style>
+  /* ManifestIQ Executive Decision Room — static design mockup.
+     No external assets, no network, no telemetry. System fonts only.
+     Palette encodes evidence state + severity, never approval. No "approved green". */
+  :root{
+    --paper:#eef1f4; --panel:#ffffff; --panel-2:#f7f9fb;
+    --ink:#16202b; --muted:#5b6b7a; --faint:#8a98a6;
+    --line:#d7dee5; --line-strong:#c2ccd6;
+    --red:#9c2027;        /* critical blocker / corrupted */
+    --red-bg:#f7e9ea;
+    --amber:#8a5d00;      /* caution / high / stale */
+    --amber-bg:#f7efdd;
+    --slate:#2f5b8a;      /* neutral-positive: readiness (never approval) */
+    --slate-bg:#e7eff7;
+    --verify:#1f7a5a;     /* verified INTEGRITY fact only */
+    --verify-bg:#e4f1eb;
+    --unknown:#6a7885;    /* missing / insufficient */
+    --mono: ui-monospace, "Cascadia Mono", "Cascadia Code", Consolas, "Liberation Mono", Menlo, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --radius:4px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#0f151b; --panel:#151d25; --panel-2:#111820;
+      --ink:#e7edf3; --muted:#9fb0bf; --faint:#6f8091;
+      --line:#25313c; --line-strong:#324150;
+      --red:#e07b82; --red-bg:#2a171a;
+      --amber:#d7a94b; --amber-bg:#241d10;
+      --slate:#8fb4dc; --slate-bg:#14202c;
+      --verify:#6fc4a0; --verify-bg:#122019;
+      --unknown:#8496a4;
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:var(--sans); color:var(--ink); background:var(--paper);
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    padding-bottom:74px; /* room for fixed footer */
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+  .eyebrow{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600}
+  .mono{font-family:var(--mono)}
+  a{color:var(--slate)}
+  hr.rule{border:0; border-top:1px solid var(--line); margin:0}
+
+  /* ---------- Top bar + Integrity Line (signature) ---------- */
+  .topbar{background:var(--panel); border-bottom:1px solid var(--line)}
+  .topbar-row{display:flex; align-items:center; gap:16px; padding:14px 0; flex-wrap:wrap}
+  .brand{font-weight:700; letter-spacing:.02em; font-size:15px}
+  .brand span{color:var(--muted); font-weight:500}
+  .chip-scope{margin-left:auto; font-family:var(--mono); font-size:12px; color:var(--muted);
+    border:1px solid var(--line); border-radius:100px; padding:3px 12px; background:var(--panel-2)}
+  .integrity-line{
+    font-family:var(--mono); font-size:12px; color:var(--muted);
+    background:var(--panel-2); border-top:1px solid var(--line);
+    padding:8px 0; display:flex; gap:10px 22px; flex-wrap:wrap; align-items:center;
+  }
+  .integrity-line .k{color:var(--faint)}
+  .integrity-line b{color:var(--ink); font-weight:600}
+  .badge-verify{color:var(--verify); font-weight:700; letter-spacing:.06em}
+  .badge-verify::before{content:"⌗ "; opacity:.8}
+
+  /* ---------- Decision card ---------- */
+  main{padding:24px 0 8px}
+  .decision-card{
+    background:var(--panel); border:1px solid var(--line-strong);
+    border-left:6px solid var(--red); border-radius:var(--radius);
+    padding:22px 24px; box-shadow:0 1px 0 rgba(0,0,0,.02);
+  }
+  .decision-head{display:flex; align-items:flex-start; gap:24px; flex-wrap:wrap}
+  .decision-title{flex:1 1 340px; min-width:280px}
+  .decision-title .verdict{font-size:26px; font-weight:750; letter-spacing:.01em; line-height:1.15; margin:4px 0 2px}
+  .decision-title .verdict small{display:block; font-size:13px; font-weight:600; color:var(--red); letter-spacing:.02em; margin-top:6px}
+  .metrics{display:flex; gap:26px; flex-wrap:wrap; align-items:flex-start}
+  .metric .eyebrow{margin-bottom:3px}
+  .metric .val{font-family:var(--mono); font-size:22px; font-weight:600}
+  .metric .sub{font-size:11px; color:var(--muted)}
+  /* bounded, attenuated score meter */
+  .score-meter{width:190px; height:10px; border:1px solid var(--line-strong); border-radius:2px; overflow:hidden; margin-top:8px; display:flex}
+  .score-meter .fill{width:62%; background:var(--amber)}
+  .score-meter .gap{flex:1; background:
+    repeating-linear-gradient(45deg, transparent 0 5px, rgba(120,135,150,.28) 5px 6px); background-color:var(--panel-2)}
+  .attenuate-note{font-size:11px; color:var(--amber); margin-top:6px}
+
+  .rationale-line{margin-top:16px; padding-top:14px; border-top:1px solid var(--line); color:var(--ink); font-size:14px}
+  .rationale-line b{font-weight:700}
+  .nextaction{margin-top:12px; display:flex; gap:12px; flex-wrap:wrap; align-items:baseline}
+  .nextaction .lab{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600; min-width:96px}
+
+  /* ---------- Five decision-layer slots ---------- */
+  .layers{margin-top:18px}
+  .layers h2{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 8px}
+  .slots{display:grid; grid-template-columns:repeat(5,1fr); gap:10px}
+  .slot{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:12px 12px 13px; position:relative}
+  .slot .name{font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); font-weight:600}
+  .slot .state{font-weight:700; font-size:14px; margin-top:6px}
+  .slot .note{font-size:11px; color:var(--muted); margin-top:4px}
+  .slot.raw .state{color:var(--red)}
+  .slot.review .state{color:var(--amber)}
+  .slot.risk .state{color:var(--slate)}
+  .slot.release .state{color:var(--red)}
+  .slot.human{border-style:dashed; border-color:var(--line-strong); background:
+    repeating-linear-gradient(45deg, transparent 0 8px, rgba(120,135,150,.10) 8px 9px)}
+  .slot.human .state{color:var(--unknown); font-style:italic; font-weight:600}
+  .slot.human .empty-tag{display:inline-block; margin-top:6px; font-size:10.5px; letter-spacing:.05em;
+    color:var(--unknown); border:1px dashed var(--line-strong); border-radius:3px; padding:2px 7px}
+
+  /* ---------- Content grid ---------- */
+  .grid{display:grid; grid-template-columns:1.35fr 1fr; gap:18px; margin-top:22px; align-items:start}
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  .panel > .hd{padding:12px 16px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px}
+  .panel > .hd h3{margin:0; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink); font-weight:700}
+  .panel > .hd .count{margin-left:auto; font-family:var(--mono); font-size:12px; color:var(--muted)}
+  .panel .bd{padding:14px 16px}
+
+  /* Tabs (rationale / blockers / actions) */
+  .tabs{display:flex; gap:4px; padding:10px 12px 0; border-bottom:1px solid var(--line); flex-wrap:wrap}
+  .tab{appearance:none; border:1px solid transparent; border-bottom:none; background:transparent; cursor:pointer;
+    font-family:var(--sans); font-size:12.5px; font-weight:600; color:var(--muted); padding:8px 12px; border-radius:4px 4px 0 0}
+  .tab[aria-selected="true"]{color:var(--ink); background:var(--panel); border-color:var(--line); position:relative; top:1px}
+  .tab:focus-visible{outline:2px solid var(--slate); outline-offset:1px}
+  .tabpanel{padding:14px 16px}
+  .tabpanel[hidden]{display:none}
+
+  /* severity lanes / blocker rows */
+  .lane-tag{display:inline-block; font-size:10px; letter-spacing:.08em; text-transform:uppercase; font-weight:700;
+    padding:2px 8px; border-radius:100px; border:1px solid currentColor}
+  .lane-critical{color:var(--red); background:var(--red-bg)}
+  .lane-material{color:var(--red); background:var(--red-bg)}
+  .lane-high{color:var(--amber); background:var(--amber-bg)}
+  .lane-review{color:var(--slate); background:var(--slate-bg)}
+  details.blocker{border:1px solid var(--line); border-radius:var(--radius); margin-bottom:10px; background:var(--panel-2)}
+  details.blocker > summary{list-style:none; cursor:pointer; padding:12px 14px; display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  details.blocker > summary::-webkit-details-marker{display:none}
+  details.blocker > summary::after{content:"▸"; margin-left:auto; color:var(--faint)}
+  details.blocker[open] > summary::after{content:"▾"}
+  details.blocker .title{font-weight:650; font-size:13.5px}
+  details.blocker .body{padding:0 14px 14px; font-size:13px; color:var(--muted)}
+  details.blocker .body .row{display:flex; gap:8px; padding:6px 0; border-top:1px solid var(--line); flex-wrap:wrap}
+  details.blocker .body .row .k{min-width:118px; color:var(--faint); font-size:11px; letter-spacing:.06em; text-transform:uppercase; font-weight:600}
+  .disp{font-weight:700; font-size:12px}
+  .disp.remediable{color:var(--amber)}
+  .disp.review{color:var(--slate)}
+  .disp.exception{color:var(--slate)}
+  .evref{font-family:var(--mono); font-size:11.5px; color:var(--slate)}
+
+  .action-list{margin:0; padding:0; list-style:none}
+  .action-list li{display:flex; gap:10px; padding:9px 0; border-top:1px solid var(--line); font-size:13.5px}
+  .action-list li:first-child{border-top:none}
+  .action-list .n{font-family:var(--mono); color:var(--faint); min-width:22px}
+
+  /* reviewers */
+  .roles{display:flex; gap:8px; flex-wrap:wrap}
+  .role-chip{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600;
+    border:1px solid var(--line-strong); border-radius:100px; padding:6px 12px; background:var(--panel-2)}
+  .role-chip .dot{width:7px; height:7px; border-radius:50%; background:var(--slate)}
+  .role-chip small{color:var(--muted); font-weight:500}
+  .review-note{font-size:11.5px; color:var(--muted); margin-top:10px}
+
+  /* domain map */
+  .domains{display:grid; grid-template-columns:repeat(2,1fr); gap:8px}
+  .dom{border:1px solid var(--line); border-radius:var(--radius); padding:10px 11px; background:var(--panel-2)}
+  .dom .dn{font-size:12.5px; font-weight:650}
+  .dom .ds{font-size:11px; font-weight:700; margin-top:3px; letter-spacing:.02em}
+  .dom .cov{height:4px; border-radius:2px; background:var(--line); margin-top:8px; overflow:hidden}
+  .dom .cov i{display:block; height:100%}
+  .s-blocker .ds{color:var(--red)} .s-blocker{border-left:3px solid var(--red)}
+  .s-caution .ds{color:var(--amber)} .s-caution{border-left:3px solid var(--amber)}
+  .s-clear .ds{color:var(--slate)} .s-clear{border-left:3px solid var(--slate)}
+  .s-review .ds{color:var(--slate)} .s-review{border-left:3px solid var(--slate)}
+  .s-unknown{border-left:3px solid var(--unknown); background:
+    repeating-linear-gradient(45deg, transparent 0 7px, rgba(120,135,150,.10) 7px 8px)}
+  .s-unknown .ds{color:var(--unknown)}
+
+  /* integrity ledger */
+  .ledger{width:100%; border-collapse:collapse; font-family:var(--mono); font-size:12px}
+  .ledger th,.ledger td{text-align:left; padding:8px 8px; border-bottom:1px solid var(--line); white-space:nowrap}
+  .ledger th{font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); font-weight:600}
+  .ledger td.hash{color:var(--muted)}
+  .st-verified{color:var(--verify); font-weight:700}
+  .st-stale{color:var(--amber); font-weight:700}
+  .st-missing{color:var(--unknown); font-weight:700}
+  .ledger-foot{font-size:11px; color:var(--muted); margin-top:10px; font-family:var(--sans)}
+
+  /* limitations */
+  .lim-list{margin:0; padding:0; list-style:none}
+  .lim-list li{padding:9px 0; border-top:1px solid var(--line); font-size:13px; display:flex; gap:10px}
+  .lim-list li:first-child{border-top:none}
+  .lim-badge{flex:0 0 auto; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    padding:2px 8px; border-radius:3px; border:1px dashed var(--line-strong); color:var(--unknown); height:fit-content}
+
+  .section-title{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:26px 0 10px}
+
+  /* persistent non-claims footer */
+  .nonclaims{position:fixed; left:0; right:0; bottom:0; background:var(--panel); border-top:2px solid var(--line-strong); z-index:20}
+  .nonclaims .inner{display:flex; align-items:center; gap:10px 18px; padding:10px 20px; flex-wrap:wrap; max-width:1180px; margin:0 auto}
+  .nonclaims .lab{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--red); font-weight:700}
+  .nonclaims .item{font-size:11.5px; color:var(--muted)}
+  .nonclaims .item::before{content:"•"; margin-right:8px; color:var(--faint)}
+  .nonclaims .item:first-of-type::before{content:none}
+
+  .mock-note{font-size:11px; color:var(--faint); text-align:center; padding:14px 0 4px}
+
+  @media (max-width:900px){
+    .grid{grid-template-columns:1fr}
+    .slots{grid-template-columns:repeat(2,1fr)}
+    .slot.human{grid-column:1 / -1}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ===== Top bar + Integrity Line ===== -->
+<header class="topbar">
+  <div class="wrap topbar-row">
+    <div class="brand">ManifestIQ <span>· Executive Assurance Cockpit</span></div>
+    <div class="chip-scope">scope: 2,318 files · 41 components</div>
+  </div>
+  <div class="wrap"><div class="integrity-line" role="group" aria-label="Run integrity line">
+    <span><span class="k">run manifest</span> <b>⌗ 9f2a1c07…c1b4</b></span>
+    <span><span class="k">provenance</span> <b>engine v3.4.1 · cfg#a72e</b></span>
+    <span><span class="k">scanned</span> <b>2026-07-10 09:12 (local)</b></span>
+    <span><span class="k">integrity</span> <span class="badge-verify">VERIFIED — 1 STALE ARTIFACT</span></span>
+  </div></div>
+</header>
+
+<main class="wrap">
+
+  <!-- ===== Decision card ===== -->
+  <section class="decision-card" aria-label="Visible decision">
+    <div class="decision-head">
+      <div class="decision-title">
+        <div class="eyebrow">Visible decision</div>
+        <div class="verdict">Not Ready — Return for Remediation
+          <small>Deterministic outcome. This is not an approval and confers no approval.</small>
+        </div>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="eyebrow">Assurance score</div>
+          <div class="val">62<span style="font-size:13px;color:var(--muted)">/100</span></div>
+          <div class="sub">deterministic</div>
+          <div class="score-meter" role="img" aria-label="Score 62 of 100, remainder attenuated for evidence gaps">
+            <span class="fill"></span><span class="gap"></span>
+          </div>
+          <div class="attenuate-note">▨ attenuated — score bounded by missing evidence</div>
+        </div>
+        <div class="metric">
+          <div class="eyebrow">Confidence</div>
+          <div class="val" style="color:var(--amber)">Moderate</div>
+          <div class="sub">limited by 2 material gaps</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rationale-line">
+      <b>Why:</b> Two blockers force <b>Not Ready</b> — an unremediated SOX control gap (material) and a
+      supply-chain integrity gap (critical). One item is exception-eligible pending named review;
+      it is <b>not</b> remediated.
+    </div>
+    <div class="nextaction">
+      <span class="lab">Next action</span>
+      <span>Remediate the SOX control gap and supply-chain integrity gap. Route the exception-eligible item to
+      ITGC/SOX and AppSec review. Re-scan to regenerate evidence.</span>
+    </div>
+  </section>
+
+  <!-- ===== Five decision-layer slots ===== -->
+  <section class="layers" aria-label="Decision layers — kept separate">
+    <h2>Decision layers — never merged</h2>
+    <div class="slots">
+      <div class="slot raw">
+        <div class="name">1 · Raw scanner decision</div>
+        <div class="state">Not Approved</div>
+        <div class="note">Deterministic scanner result</div>
+      </div>
+      <div class="slot review">
+        <div class="name">2 · Review readiness</div>
+        <div class="state">Mandatory Review</div>
+        <div class="note">Ready for review ≠ approval</div>
+      </div>
+      <div class="slot risk">
+        <div class="name">3 · Risk acceptance coverage</div>
+        <div class="state">Partial</div>
+        <div class="note">Bounded evidence, not remediation</div>
+      </div>
+      <div class="slot release">
+        <div class="name">4 · Release readiness</div>
+        <div class="state">Not Ready</div>
+        <div class="note">Readiness ≠ release approval</div>
+      </div>
+      <div class="slot human" aria-label="Human approval — not present">
+        <div class="name">5 · Human approval</div>
+        <div class="state">— not present —</div>
+        <span class="empty-tag">Human approval is not inferred</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Content grid ===== -->
+  <div class="grid">
+
+    <!-- LEFT column: rationale / blockers / actions -->
+    <div>
+      <section class="panel" aria-label="Decision detail">
+        <div class="tabs" role="tablist" aria-label="Decision detail views">
+          <button class="tab" role="tab" id="tab-block" aria-controls="p-block" aria-selected="true">Critical blockers</button>
+          <button class="tab" role="tab" id="tab-rat" aria-controls="p-rat" aria-selected="false">Rationale</button>
+          <button class="tab" role="tab" id="tab-act" aria-controls="p-act" aria-selected="false">Required actions</button>
+        </div>
+
+        <div class="tabpanel" id="p-block" role="tabpanel" aria-labelledby="tab-block">
+          <details class="blocker" open>
+            <summary>
+              <span class="lane-tag lane-material">Material gap</span>
+              <span class="title">SOX control gap — change-management evidence incomplete</span>
+            </summary>
+            <div class="body">
+              <div class="row"><span class="k">Domain</span><span>SOX / Finance</span></div>
+              <div class="row"><span class="k">Impact</span><span>Blocks release; ITGC change-management assertion cannot be supported.</span></div>
+              <div class="row"><span class="k">Disposition</span><span class="disp review">Review-gated · exception-eligible (bounded)</span></div>
+              <div class="row"><span class="k">Evidence</span><span class="evref">rule ITGC-CM-014 → finding F-2211 → ⌗ 4c9d…7a</span></div>
+            </div>
+          </details>
+
+          <details class="blocker">
+            <summary>
+              <span class="lane-tag lane-critical">Critical</span>
+              <span class="title">Supply-chain integrity gap — unverified dependency provenance</span>
+            </summary>
+            <div class="body">
+              <div class="row"><span class="k">Domain</span><span>Supply chain</span></div>
+              <div class="row"><span class="k">Impact</span><span>Provenance for 3 transitive dependencies cannot be verified against the manifest.</span></div>
+              <div class="row"><span class="k">Disposition</span><span class="disp remediable">Remediable</span></div>
+              <div class="row"><span class="k">Evidence</span><span class="evref">rule SC-PROV-003 → finding F-1804 → ⌗ b17f…2e</span></div>
+            </div>
+          </details>
+
+          <details class="blocker">
+            <summary>
+              <span class="lane-tag lane-high">High</span>
+              <span class="title">Data-protection finding — secret material reachable in evidence path</span>
+            </summary>
+            <div class="body">
+              <div class="row"><span class="k">Domain</span><span>Data protection</span></div>
+              <div class="row"><span class="k">Impact</span><span>Artifact marked sensitive; not safe to distribute without redaction.</span></div>
+              <div class="row"><span class="k">Disposition</span><span class="disp remediable">Remediable</span></div>
+              <div class="row"><span class="k">Evidence</span><span class="evref">rule DP-SEC-021 → finding F-2043 → ⌗ e902…9c</span></div>
+            </div>
+          </details>
+        </div>
+
+        <div class="tabpanel" id="p-rat" role="tabpanel" aria-labelledby="tab-rat" hidden>
+          <ol class="action-list" style="counter-reset:none">
+            <li><span class="n">→</span><span><b>Not Ready</b> is forced by the SOX material gap — a required control assertion has insufficient evidence. <span class="evref">F-2211</span></span></li>
+            <li><span class="n">→</span><span>Critical supply-chain provenance gap independently prevents readiness. <span class="evref">F-1804</span></span></li>
+            <li><span class="n">→</span><span>Risk acceptance covers 1 lower item only; it is <b>bounded evidence</b>, not remediation, and does not lift the decision. <span class="evref">X-0087</span></span></li>
+            <li><span class="n">→</span><span>Score attenuated because pentest evidence and one threat model are missing (see limitations).</span></li>
+          </ol>
+        </div>
+
+        <div class="tabpanel" id="p-act" role="tabpanel" aria-labelledby="tab-act" hidden>
+          <ol class="action-list">
+            <li><span class="n">1</span><span>Remediate supply-chain provenance for 3 dependencies; re-scan to regenerate integrity evidence.</span></li>
+            <li><span class="n">2</span><span>Complete SOX change-management evidence, or route to ITGC/SOX review for a bounded, attributable exception.</span></li>
+            <li><span class="n">3</span><span>Redact sensitive data-protection artifact in derived output; raw evidence remains unmodified.</span></li>
+            <li><span class="n">4</span><span>Supply missing pentest evidence and threat model for module <span class="mono">svc-ledger</span> to lift score attenuation.</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <div class="section-title">Domain assurance map</div>
+      <section class="panel"><div class="bd">
+        <div class="domains" aria-label="Domain assurance map">
+          <div class="dom s-caution"><div class="dn">Architecture</div><div class="ds">Caution</div><div class="cov"><i style="width:72%;background:var(--amber)"></i></div></div>
+          <div class="dom s-caution"><div class="dn">Security</div><div class="ds">Caution · High</div><div class="cov"><i style="width:68%;background:var(--amber)"></i></div></div>
+          <div class="dom s-caution"><div class="dn">Data protection</div><div class="ds">Caution · High</div><div class="cov"><i style="width:70%;background:var(--amber)"></i></div></div>
+          <div class="dom s-blocker"><div class="dn">SOX / Finance</div><div class="ds">Blocker · Material</div><div class="cov"><i style="width:44%;background:var(--red)"></i></div></div>
+          <div class="dom s-unknown"><div class="dn">AI / Model risk</div><div class="ds">Insufficient Evidence</div><div class="cov"><i style="width:18%;background:var(--unknown)"></i></div></div>
+          <div class="dom s-blocker"><div class="dn">Supply chain</div><div class="ds">Blocker · Critical</div><div class="cov"><i style="width:52%;background:var(--red)"></i></div></div>
+          <div class="dom s-clear"><div class="dn">License</div><div class="ds">Clear · with evidence</div><div class="cov"><i style="width:96%;background:var(--slate)"></i></div></div>
+          <div class="dom s-caution"><div class="dn">Operations</div><div class="ds">Caution</div><div class="cov"><i style="width:74%;background:var(--amber)"></i></div></div>
+          <div class="dom s-clear"><div class="dn">Delivery</div><div class="ds">Clear · with evidence</div><div class="cov"><i style="width:91%;background:var(--slate)"></i></div></div>
+          <div class="dom s-review"><div class="dn">Governance</div><div class="ds">Mandatory Review</div><div class="cov"><i style="width:60%;background:var(--slate)"></i></div></div>
+        </div>
+        <div class="review-note">“Clear · with evidence” is a low-risk evidence state, not approval. Unknown/insufficient domains are shown, not hidden.</div>
+      </div></section>
+    </div>
+
+    <!-- RIGHT column: reviewers / integrity / limitations -->
+    <div>
+      <section class="panel" aria-label="Required reviewers">
+        <div class="hd"><h3>Required reviewers</h3><span class="count">5 roles</span></div>
+        <div class="bd">
+          <div class="roles">
+            <span class="role-chip"><span class="dot"></span>CISO <small>· security posture</small></span>
+            <span class="role-chip"><span class="dot"></span>CTO <small>· architecture</small></span>
+            <span class="role-chip"><span class="dot"></span>AppSec <small>· findings</small></span>
+            <span class="role-chip"><span class="dot"></span>ITGC / SOX <small>· control gap</small></span>
+            <span class="role-chip"><span class="dot"></span>Security Architecture <small>· supply chain</small></span>
+          </div>
+          <div class="review-note">Chips signal <b>review required</b>. They record no sign-off and infer no approval.</div>
+        </div>
+      </section>
+
+      <div class="section-title">Evidence integrity &amp; manifest</div>
+      <section class="panel"><div class="bd">
+        <table class="ledger" aria-label="Evidence integrity ledger">
+          <thead><tr><th>Artifact</th><th>Content hash</th><th>State</th></tr></thead>
+          <tbody>
+            <tr><td>findings.json</td><td class="hash">⌗ 4c9d…7a</td><td class="st-verified">VERIFIED</td></tr>
+            <tr><td>evidence.bundle</td><td class="hash">⌗ b17f…2e</td><td class="st-verified">VERIFIED</td></tr>
+            <tr><td>dossier.json</td><td class="hash">⌗ e902…9c</td><td class="st-verified">VERIFIED</td></tr>
+            <tr><td>sbom.snapshot</td><td class="hash">⌗ 71aa…40</td><td class="st-stale">STALE</td></tr>
+            <tr><td>pentest.evidence</td><td class="hash">— absent —</td><td class="st-missing">MISSING</td></tr>
+          </tbody>
+        </table>
+        <div class="ledger-foot">Green marks <b>verified integrity</b> — a fact about evidence, never system approval.
+        Stale/missing artifacts fail closed and cap the decision above.</div>
+      </div></section>
+
+      <div class="section-title">Missing evidence &amp; limitations</div>
+      <section class="panel"><div class="bd">
+        <ul class="lim-list">
+          <li><span class="lim-badge">Missing</span><span>Penetration-testing evidence for module <span class="mono">svc-ledger</span> is absent. No pentest completion is claimed.</span></li>
+          <li><span class="lim-badge">Insufficient</span><span>Threat model for <span class="mono">svc-ledger</span> is incomplete; AI/Model-risk domain lacks evidence.</span></li>
+          <li><span class="lim-badge">Stale</span><span><span class="mono">sbom.snapshot</span> predates the current source; supply-chain conclusions are conservative.</span></li>
+          <li><span class="lim-badge">Out of scope</span><span>Vendored third-party libraries were not scanned; absence of findings is not a pass.</span></li>
+        </ul>
+      </div></section>
+    </div>
+  </div>
+
+  <p class="mock-note">Static design mockup · realistic placeholder data · no live scan, no file access, no network.</p>
+</main>
+
+<!-- ===== Persistent non-claims footer ===== -->
+<footer class="nonclaims" aria-label="Standing non-claims">
+  <div class="inner">
+    <span class="lab">Non-claims</span>
+    <span class="item">Not certified</span>
+    <span class="item">No SOX / privacy / legal approval</span>
+    <span class="item">Not a release approval</span>
+    <span class="item">No safety claim</span>
+    <span class="item">Human approval is not inferred</span>
+  </div>
+</footer>
+
+<script>
+  // Local tab behavior for demonstration only. No network, no storage, no telemetry.
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+    function select(tab) {
+      tabs.forEach(function (t) {
+        var selected = t === tab;
+        t.setAttribute('aria-selected', selected ? 'true' : 'false');
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !selected;
+      });
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { select(t); });
+      t.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        var dir = e.key === 'ArrowRight' ? 1 : -1;
+        var next = tabs[(i + dir + tabs.length) % tabs.length];
+        next.focus(); select(next);
+      });
+    });
+  })();
+</script>
+</body>
+</html>
