@@ -8,13 +8,21 @@
     "schema_version",
     "command",
     "profile",
+    "scan_target",
     "decision",
     "score",
     "critical",
     "high",
+    "medium",
+    "low",
+    "findings_total",
     "evidence_package_path",
     "manifest_path",
+    "report_path",
+    "manifest_status",
+    "report_status",
     "status",
+    "generated_at",
     "notes"
   ],
   "properties": {
@@ -22,6 +30,7 @@
     "schema_version": { "const": "0.1" },
     "command": { "type": "string" },
     "profile": { "type": "string" },
+    "scan_target": { "type": "string" },
     "decision": {
       "type": "string",
       "enum": ["Approved", "Conditional", "Mandatory Review", "Not Approved", "Rejected", "Unknown"]
@@ -29,9 +38,16 @@
     "score": { "type": "number" },
     "critical": { "type": "integer", "minimum": 0 },
     "high": { "type": "integer", "minimum": 0 },
+    "medium": { "type": "integer", "minimum": 0 },
+    "low": { "type": "integer", "minimum": 0 },
+    "findings_total": { "type": "integer", "minimum": 0 },
     "evidence_package_path": { "type": ["string", "null"] },
     "manifest_path": { "type": ["string", "null"] },
+    "report_path": { "type": ["string", "null"] },
+    "manifest_status": { "type": "string", "enum": ["present", "missing", "unknown"] },
+    "report_status": { "type": "string", "enum": ["present", "missing", "unknown"] },
     "status": { "type": "string", "enum": ["passed", "failed", "unknown"] },
+    "generated_at": { "type": "string" },
     "notes": { "type": "array", "items": { "type": "string" } }
   }
 }

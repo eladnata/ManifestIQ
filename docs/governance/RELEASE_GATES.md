@@ -119,11 +119,28 @@ This writes:
 
 The collector does not approve releases and does not replace adversarial, gold set, portfolio, or trend validation. It only creates a deterministic test summary artifact for governance evidence.
 
+## Sample Scan Evidence Collector
+
+Generate a sample scan summary from a real scanner evidence package:
+
+```bash
+python -m scanner scan-folder --path tests/sample_projects/insecure-python --output output --profile finance-sox
+python -m scanner collect-scan-evidence --evidence-package output/evidence-package --command "python -m scanner scan-folder --path tests/sample_projects/insecure-python --output output --profile finance-sox" --output governance-output
+```
+
+This writes:
+
+- `governance-output/sample_scan_summary.json`
+
+The collector summarizes evidence-collection status only. It does not turn a failed scanner decision into failed evidence collection, and it does not infer release approval.
+
 ## Recommended Release Evidence Sequence
 
 ```bash
 python -m scanner governance-check --output governance-output
 python -m pytest --junitxml governance-output/pytest-results.xml
 python -m scanner collect-test-evidence --junit governance-output/pytest-results.xml --command "python -m pytest --junitxml governance-output/pytest-results.xml" --output governance-output
+python -m scanner scan-folder --path tests/sample_projects/insecure-python --output output --profile finance-sox
+python -m scanner collect-scan-evidence --evidence-package output/evidence-package --command "python -m scanner scan-folder --path tests/sample_projects/insecure-python --output output --profile finance-sox" --output governance-output
 python -m scanner prepare-release-evidence --manifest governance/examples/sample-release-manifest.json --output release-output
 ```

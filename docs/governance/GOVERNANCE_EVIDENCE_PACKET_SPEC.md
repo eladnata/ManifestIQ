@@ -101,12 +101,29 @@ The collector parses real JUnit XML evidence and writes:
 
 It does not run tests, approve a release, or replace validation suites. Missing, invalid, or zero-test XML produces `status: unknown` with notes.
 
+## Sample Scan Evidence Collection
+
+Generate sample scan evidence from an existing scanner evidence package with:
+
+```bash
+python -m scanner scan-folder --path tests/sample_projects/insecure-python --output output --profile finance-sox
+python -m scanner collect-scan-evidence --evidence-package output/evidence-package --command "python -m scanner scan-folder --path tests/sample_projects/insecure-python --output output --profile finance-sox" --output governance-output
+```
+
+The collector parses the real evidence package and writes:
+
+- `governance-output/sample_scan_summary.json`
+
+It does not run the scan, approve a release, or change scanner decisions. A scanner decision such as `Not Approved` can still produce `status: passed` when the evidence package, manifest, and scan summary were generated and parsed correctly.
+
 ## Recommended Local Sequence
 
 ```bash
 python -m scanner governance-check --output governance-output
 python -m pytest --junitxml governance-output/pytest-results.xml
 python -m scanner collect-test-evidence --junit governance-output/pytest-results.xml --command "python -m pytest --junitxml governance-output/pytest-results.xml" --output governance-output
+python -m scanner scan-folder --path tests/sample_projects/insecure-python --output output --profile finance-sox
+python -m scanner collect-scan-evidence --evidence-package output/evidence-package --command "python -m scanner scan-folder --path tests/sample_projects/insecure-python --output output --profile finance-sox" --output governance-output
 python -m scanner prepare-release-evidence --manifest governance/examples/sample-release-manifest.json --output release-output
 ```
 

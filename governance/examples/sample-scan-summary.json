@@ -3,13 +3,21 @@
   "schema_version": "0.1",
   "command": "python -m scanner scan-folder --path tests/sample_projects/insecure-python --output output --profile finance-sox",
   "profile": "finance-sox",
+  "scan_target": "tests/sample_projects/insecure-python",
   "decision": "Not Approved",
   "score": 0,
   "critical": 1,
   "high": 1,
+  "medium": 0,
+  "low": 0,
+  "findings_total": 2,
   "evidence_package_path": "output/evidence-package",
   "manifest_path": "output/evidence-package/manifest.json",
+  "report_path": "output/evidence-package/final-report.html",
+  "manifest_status": "present",
+  "report_status": "present",
   "status": "passed",
+  "generated_at": "2026-07-09T00:00:00Z",
   "notes": [
     "Sample scan summary confirms scan execution, not release approval."
   ]
