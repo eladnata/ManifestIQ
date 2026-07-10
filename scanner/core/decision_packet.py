@@ -294,6 +294,7 @@ def build_decision_packet(
     system_dossier: dict,
     control_context: dict,
     manifest: dict | None,
+    risk_acceptance: dict | None = None,
 ) -> dict:
     source_metadata = summary.get("source_metadata", {})
     rationale = _rationale(summary, findings, gaps, acceptance_matrix, confidence_summary)
@@ -337,6 +338,8 @@ def build_decision_packet(
         "limitations": _dedupe_sorted([*system_dossier.get("limitations", []), *confidence_summary.get("limitations", []), *LIMITATIONS]),
         "non_claims": NON_CLAIMS,
     }
+    if risk_acceptance:
+        packet["risk_acceptance"] = risk_acceptance
     return packet
 
 

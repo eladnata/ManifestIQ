@@ -1,0 +1,40 @@
+{
+  "schema": "manifestiq-exception-register",
+  "schema_version": "0.1",
+  "register_id": "sample-exception-register",
+  "generated_at": "2026-07-10T00:00:00Z",
+  "owner": "security-governance",
+  "records": [
+    {
+      "exception_id": "EXC-ARCH-011",
+      "title": "Temporary accepted risk for sample missing owner metadata finding",
+      "status": "approved",
+      "scope": {
+        "profiles": ["finance-sox"],
+        "source_paths": ["tests/sample_projects/insecure-python"],
+        "rule_ids": ["ARCH-011"],
+        "finding_ids": [],
+        "gap_ids": [],
+        "domains": []
+      },
+      "reason": "Sample register entry used to exercise deterministic risk acceptance review output.",
+      "risk_statement": "A sample architecture ownership risk remains present and requires bounded review evidence before any reviewer relies on exception coverage.",
+      "compensating_controls": [
+        "Temporary named technical owner is tracked outside the sample repository",
+        "Architecture review remains required before release disposition"
+      ],
+      "owner": "security-governance@example.com",
+      "approved_by": "cto@example.com",
+      "approved_role": "CTO / Enterprise Architecture",
+      "approved_at": "2026-07-10T00:00:00Z",
+      "expires_at": "2026-12-31T00:00:00Z",
+      "review_required_by": "2026-11-30T00:00:00Z",
+      "evidence_references": [
+        "governance/examples/sample-approval-record.json"
+      ],
+      "limitations": [
+        "This sample exception does not grant production approval."
+      ]
+    }
+  ]
+}

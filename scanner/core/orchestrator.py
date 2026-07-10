@@ -22,6 +22,12 @@ from scanner.analyzers import (
 )
 from scanner.core.evidence import build_manifest, write_json
 from scanner.core.decision_packet import build_decision_packet, render_decision_packet_markdown
+from scanner.core.risk_acceptance import (
+    build_risk_acceptance_review,
+    load_exception_register,
+    render_risk_acceptance_markdown,
+    risk_acceptance_summary,
+)
 from scanner.core.inventory import build_inventory
 from scanner.core.report_generator import generate_html_report
 from scanner.core.assurance_pipeline import run_assurance_pipeline
@@ -54,7 +60,7 @@ def _scan_id() -> str:
     return "scan_" + datetime.now(timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
 
 
-def run_scan(workspace: Workspace, profile: str, scanner_version: str) -> dict:
+def run_scan(workspace: Workspace, profile: str, scanner_version: str, exception_register: Path | None = None) -> dict:
     scan_id = _scan_id()
     evidence_dir = workspace.evidence_dir
 
@@ -175,6 +181,19 @@ def run_scan(workspace: Workspace, profile: str, scanner_version: str) -> dict:
     write_json(evidence_dir / "enterprise-acceptance-matrix.json", assurance["enterprise_acceptance_matrix"])
     write_json(evidence_dir / "system-dossier.json", assurance["system_dossier"])
 
+    risk_acceptance_review = None
+    if exception_register:
+        register = load_exception_register(exception_register)
+        normalized_exceptions, risk_acceptance_review = build_risk_acceptance_review(
+            exception_register=register,
+            summary=summary,
+            findings=findings,
+            gaps=assurance["gaps"],
+        )
+        write_json(evidence_dir / "exception-register-normalized.json", normalized_exceptions)
+        write_json(evidence_dir / "risk-acceptance-review.json", risk_acceptance_review)
+        (evidence_dir / "risk-acceptance-review.md").write_text(render_risk_acceptance_markdown(risk_acceptance_review), encoding="utf-8")
+
     preliminary_manifest = build_manifest(evidence_dir)
     decision_packet_inputs = assurance["decision_packet_inputs"]
     decision_packet = build_decision_packet(
@@ -186,6 +205,7 @@ def run_scan(workspace: Workspace, profile: str, scanner_version: str) -> dict:
         system_dossier=decision_packet_inputs["system_dossier"],
         control_context=decision_packet_inputs["control_context"],
         manifest=preliminary_manifest,
+        risk_acceptance=risk_acceptance_summary(risk_acceptance_review),
     )
     write_json(evidence_dir / "decision-packet.json", decision_packet)
     (evidence_dir / "decision-packet.md").write_text(render_decision_packet_markdown(decision_packet), encoding="utf-8")
@@ -197,6 +217,7 @@ def run_scan(workspace: Workspace, profile: str, scanner_version: str) -> dict:
         "analyzer_results": analyzer_results,
         "assurance": assurance,
         "decision_packet": decision_packet,
+        "risk_acceptance_review": risk_acceptance_review,
     })
     manifest = build_manifest(evidence_dir)
 

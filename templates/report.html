@@ -40,6 +40,19 @@
     <tr><th>Packet artifact</th><td><code>decision-packet.json</code>{% if decision_packet.packet_id %} ({{ decision_packet.packet_id }}){% endif %}</td></tr>
   </table>
 
+  {% if risk_acceptance_review %}
+  <h2>Risk Acceptance</h2>
+  <table>
+    <tr><th>Review status</th><td>{{ risk_acceptance_review.review_status }}</td></tr>
+    <tr><th>Covered material findings</th><td>{{ risk_acceptance_review.coverage_summary.material_findings_covered }}</td></tr>
+    <tr><th>Uncovered material findings</th><td>{{ risk_acceptance_review.coverage_summary.material_findings_uncovered }}</td></tr>
+    <tr><th>Covered material gaps</th><td>{{ risk_acceptance_review.coverage_summary.material_gaps_covered }}</td></tr>
+    <tr><th>Uncovered material gaps</th><td>{{ risk_acceptance_review.coverage_summary.material_gaps_uncovered }}</td></tr>
+    <tr><th>Expired/invalid exception count</th><td>{{ risk_acceptance_review.expired_or_invalid_exceptions | length }}</td></tr>
+    <tr><th>Review artifact</th><td><code>risk-acceptance-review.json</code></td></tr>
+  </table>
+  {% endif %}
+
   <h2>Blocking Gates</h2>
   <table>
     <tr><th>Finding ID</th><th>Rule</th><th>Severity</th><th>Category</th><th>Decision Impact</th><th>Title</th></tr>
