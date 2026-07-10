@@ -30,7 +30,7 @@ def _status(findings: list[dict]) -> str:
         return "Conditional"
     if findings:
         return "Conditional"
-    return "Passed"
+    return "Accepted"
 
 
 def build_acceptance_matrix(findings: list[dict], gaps: list[dict], confidence_summary: dict, scoring: dict) -> dict:
@@ -39,11 +39,11 @@ def build_acceptance_matrix(findings: list[dict], gaps: list[dict], confidence_s
         domain_findings = [finding for finding in findings if CATEGORY_DOMAIN.get(finding.get("category"), "Governance") == domain]
         domain_gaps = [gap for gap in gaps if gap.get("domain") == domain]
         status = _status(domain_findings)
-        if domain_gaps and status == "Passed":
+        if domain_gaps and status == "Accepted":
             status = "Conditional"
-        confidence = "High" if status == "Passed" else "Medium"
+        confidence = "High" if status == "Accepted" else "Medium"
         if not domain_findings and not domain_gaps and domain in {"Interfaces", "External Egress", "Database and Storage"}:
-            status = "Unknown"
+            status = "Insufficient Evidence"
             confidence = "Low"
         reason = "No material findings or gaps were identified for this domain."
         if domain_findings:
@@ -58,8 +58,15 @@ def build_acceptance_matrix(findings: list[dict], gaps: list[dict], confidence_s
             "blocking_findings": [
                 finding["finding_id"]
                 for finding in domain_findings
-                if finding.get("decision_impact") in {"Block", "Mandatory Review"} or finding.get("severity") == "Critical"
+                if finding.get("decision_impact") == "Block" or finding.get("severity") == "Critical"
             ],
+            "mandatory_review_findings": [
+                finding["finding_id"]
+                for finding in domain_findings
+                if finding.get("decision_impact") == "Mandatory Review"
+            ],
+            "gaps": [gap["gap_id"] for gap in domain_gaps],
+            "required_actions": sorted({item for finding in domain_findings for item in finding.get("remediation", [])}),
             "related_gaps": [gap["gap_id"] for gap in domain_gaps],
             "required_remediation": sorted({item for finding in domain_findings for item in finding.get("remediation", [])}),
         })
@@ -71,6 +78,9 @@ def build_acceptance_matrix(findings: list[dict], gaps: list[dict], confidence_s
             "confidence": "High",
             "reason": "Final decision is Not Approved because a blocking gate was produced.",
             "blocking_findings": [],
+            "mandatory_review_findings": [],
+            "gaps": [],
+            "required_actions": ["Review blocking gates in scan-summary.json."],
             "related_gaps": [],
             "required_remediation": ["Review blocking gates in scan-summary.json."],
         })

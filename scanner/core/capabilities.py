@@ -2,10 +2,35 @@ from __future__ import annotations
 
 
 STRICT_PROFILES = ["enterprise", "finance-sox", "ai-enabled", "production-critical"]
+DOMAIN_BY_SIGNAL_PREFIX = {
+    "ai": "ai_model",
+    "architecture": "architecture",
+    "database": "data",
+    "data": "data",
+    "delivery": "delivery",
+    "egress": "egress",
+    "finance": "governance",
+    "governance": "governance",
+    "language": "platform",
+    "license": "license",
+    "maintainability": "maintainability",
+    "ops": "operations",
+    "platform": "platform",
+    "security": "security",
+    "supply_chain": "security",
+}
+
+
+def _domains_for_signals(signal_ids: list[str]) -> list[str]:
+    domains = {
+        DOMAIN_BY_SIGNAL_PREFIX.get(signal_id.split(".", 1)[0], "unknown")
+        for signal_id in signal_ids
+    }
+    return sorted(domains or {"unknown"})
 
 
 def capability_registry() -> list[dict]:
-    return [
+    capabilities = [
         {
             "analyzer_id": "secrets",
             "produces_signals": ["security.secret.detected"],
@@ -144,6 +169,10 @@ def capability_registry() -> list[dict]:
             "required_for_profiles": STRICT_PROFILES,
         },
     ]
+    for capability in capabilities:
+        capability.setdefault("domains", _domains_for_signals(capability.get("produces_signals", [])))
+        capability.setdefault("limitations", [])
+    return capabilities
 
 
 def known_signal_ids() -> set[str]:
