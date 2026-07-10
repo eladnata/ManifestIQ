@@ -59,7 +59,26 @@ def _reset_output(output_dir: Path) -> tuple[Path, Path]:
 
 
 def _safe_copytree(src: Path, dst: Path) -> None:
-    ignore = shutil.ignore_patterns(".git", "node_modules", ".venv", "venv", "__pycache__", ".pytest_cache", "output")
+    ignore = shutil.ignore_patterns(
+        ".git",
+        "node_modules",
+        ".venv",
+        "venv",
+        "__pycache__",
+        ".pytest_cache",
+        "output",
+        "outputs",
+        "governance-output",
+        "release-output",
+        "validation-output",
+        "goldset-output",
+        "portfolio-output",
+        "trend-output",
+        "self-assurance-output",
+        "release-candidate-output",
+        "scanner-output",
+        "evidence-package",
+    )
     shutil.copytree(src, dst, dirs_exist_ok=True, ignore=ignore)
 
 

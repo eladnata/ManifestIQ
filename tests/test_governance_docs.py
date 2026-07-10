@@ -14,6 +14,7 @@ GOVERNANCE_DOCS = [
     "docs/governance/VALIDATION_GATE_POLICY.md",
     "docs/governance/SECURE_DEVELOPMENT_POLICY.md",
     "docs/governance/RISK_ACCEPTANCE_EXCEPTION_POLICY.md",
+    "docs/governance/RELEASE_HARDENING_SELF_ASSURANCE.md",
 ]
 
 ADR_DOCS = [
@@ -53,6 +54,7 @@ def test_required_governance_document_headings_exist():
         "docs/governance/VALIDATION_GATE_POLICY.md": ["## Gate Types", "## Blocking Conditions"],
         "docs/governance/SECURE_DEVELOPMENT_POLICY.md": ["## Product Security Boundary", "## Safe Handling of Scanned Source Code"],
         "docs/governance/RISK_ACCEPTANCE_EXCEPTION_POLICY.md": ["## Purpose", "## Approval Role Logic", "## Acceptance Criteria"],
+        "docs/governance/RELEASE_HARDENING_SELF_ASSURANCE.md": ["## Purpose", "## Local Workflow", "## Acceptance Criteria"],
     }
     for doc, headings in expected_headings.items():
         text = _read(doc)

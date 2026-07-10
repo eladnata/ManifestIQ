@@ -42,6 +42,8 @@ portfolio-output/
 trend-output/
 release-output/
 scanner-output/
+self-assurance-output/
+release-candidate-output/
 
 # Logs and temp files
 *.log

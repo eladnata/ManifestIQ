@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ManifestIQ Release Candidate Summary",
+  "type": "object",
+  "required": ["schema", "schema_version", "generated_at", "release_candidate_id", "scanner_version", "git", "inputs", "evidence_status", "release_readiness", "limitations", "non_claims"],
+  "properties": {
+    "schema": { "const": "manifestiq-release-candidate-summary" },
+    "schema_version": { "const": "0.1" },
+    "generated_at": { "type": "string" },
+    "release_candidate_id": { "type": "string" },
+    "scanner_version": { "type": "string" },
+    "git": {
+      "type": "object",
+      "required": ["branch", "commit", "dirty_working_tree"]
+    },
+    "inputs": {
+      "type": "object",
+      "required": ["governance_check_report", "test_result_summary", "sample_scan_summary", "self_assurance_summary", "release_manifest"]
+    },
+    "evidence_status": {
+      "type": "object",
+      "required": ["governance", "tests", "sample_scan", "self_assurance", "release_manifest"]
+    },
+    "release_readiness": {
+      "type": "object",
+      "required": ["status", "blocking_reasons", "warnings", "required_actions"],
+      "properties": {
+        "status": { "enum": ["Ready for Review", "Conditional Review", "Not Ready", "Not Evaluated"] },
+        "blocking_reasons": { "type": "array", "items": { "type": "string" } },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "required_actions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "non_claims": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

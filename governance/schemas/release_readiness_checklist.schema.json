@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ManifestIQ Release Readiness Checklist",
+  "type": "object",
+  "required": ["schema", "schema_version", "generated_at", "items", "summary"],
+  "properties": {
+    "schema": { "const": "manifestiq-release-readiness-checklist" },
+    "schema_version": { "const": "0.1" },
+    "generated_at": { "type": "string" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "category", "description", "status", "evidence_reference", "required"],
+        "properties": {
+          "item_id": { "type": "string" },
+          "category": { "enum": ["Governance", "Testing", "Validation", "Evidence", "Documentation", "Security", "Release", "Limitations"] },
+          "description": { "type": "string" },
+          "status": { "enum": ["passed", "failed", "warning", "not_applicable", "unknown"] },
+          "evidence_reference": { "type": ["string", "null"] },
+          "required": { "type": "boolean" }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": ["required_total", "required_passed", "required_failed", "warnings", "status"],
+      "properties": {
+        "required_total": { "type": "integer" },
+        "required_passed": { "type": "integer" },
+        "required_failed": { "type": "integer" },
+        "warnings": { "type": "integer" },
+        "status": { "enum": ["Ready for Review", "Conditional Review", "Not Ready", "Not Evaluated"] }
+      }
+    }
+  },
+  "additionalProperties": true
+}
