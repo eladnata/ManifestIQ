@@ -62,4 +62,11 @@ def run_assurance_pipeline(
         "evidence_graph": evidence_graph,
         "enterprise_acceptance_matrix": acceptance_matrix,
         "system_dossier": system_dossier,
+        "decision_packet_inputs": {
+            "gaps": gaps,
+            "confidence_summary": confidence_summary,
+            "acceptance_matrix": acceptance_matrix,
+            "system_dossier": system_dossier,
+            "control_context": control_context,
+        },
     }

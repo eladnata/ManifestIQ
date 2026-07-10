@@ -29,6 +29,17 @@
     <p><strong>Evidence SHA256:</strong> <code>{{ summary.evidence_sha256 | default('calculated in manifest') }}</code></p>
   </div>
 
+  <h2>Decision Packet</h2>
+  <table>
+    <tr><th>Decision</th><td>{{ decision_packet.decision.value }}</td></tr>
+    <tr><th>Score</th><td>{{ decision_packet.decision.score }}/100</td></tr>
+    <tr><th>Why this decision</th><td><ul>{% for item in decision_packet.decision.rationale[:5] %}<li>{{ item }}</li>{% endfor %}</ul></td></tr>
+    <tr><th>Top blockers / top risks</th><td><ul>{% for risk in decision_packet.top_risks[:5] %}<li>{{ risk.severity }} {{ risk.rule_id }}: {{ risk.title }} ({{ risk.decision_impact }})</li>{% else %}<li>No top risks were identified.</li>{% endfor %}</ul></td></tr>
+    <tr><th>Required reviewers</th><td>{{ decision_packet.required_reviewers }}</td></tr>
+    <tr><th>Confidence</th><td>{{ decision_packet.confidence_summary.overall_confidence }}</td></tr>
+    <tr><th>Packet artifact</th><td><code>decision-packet.json</code>{% if decision_packet.packet_id %} ({{ decision_packet.packet_id }}){% endif %}</td></tr>
+  </table>
+
   <h2>Blocking Gates</h2>
   <table>
     <tr><th>Finding ID</th><th>Rule</th><th>Severity</th><th>Category</th><th>Decision Impact</th><th>Title</th></tr>

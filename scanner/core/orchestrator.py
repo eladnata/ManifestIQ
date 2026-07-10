@@ -21,6 +21,7 @@ from scanner.analyzers import (
     sox_detector,
 )
 from scanner.core.evidence import build_manifest, write_json
+from scanner.core.decision_packet import build_decision_packet, render_decision_packet_markdown
 from scanner.core.inventory import build_inventory
 from scanner.core.report_generator import generate_html_report
 from scanner.core.assurance_pipeline import run_assurance_pipeline
@@ -174,11 +175,28 @@ def run_scan(workspace: Workspace, profile: str, scanner_version: str) -> dict:
     write_json(evidence_dir / "enterprise-acceptance-matrix.json", assurance["enterprise_acceptance_matrix"])
     write_json(evidence_dir / "system-dossier.json", assurance["system_dossier"])
 
+    preliminary_manifest = build_manifest(evidence_dir)
+    decision_packet_inputs = assurance["decision_packet_inputs"]
+    decision_packet = build_decision_packet(
+        summary=summary,
+        findings=findings,
+        gaps=decision_packet_inputs["gaps"],
+        confidence_summary=decision_packet_inputs["confidence_summary"],
+        acceptance_matrix=decision_packet_inputs["acceptance_matrix"],
+        system_dossier=decision_packet_inputs["system_dossier"],
+        control_context=decision_packet_inputs["control_context"],
+        manifest=preliminary_manifest,
+    )
+    write_json(evidence_dir / "decision-packet.json", decision_packet)
+    (evidence_dir / "decision-packet.md").write_text(render_decision_packet_markdown(decision_packet), encoding="utf-8")
+    assurance["decision_packet"] = decision_packet
+
     report_path = generate_html_report(evidence_dir, {
         "summary": summary,
         "findings": findings,
         "analyzer_results": analyzer_results,
         "assurance": assurance,
+        "decision_packet": decision_packet,
     })
     manifest = build_manifest(evidence_dir)
 
