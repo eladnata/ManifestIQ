@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ManifestIQ Exception Register",
+  "type": "object",
+  "required": ["schema", "schema_version", "register_id", "generated_at", "owner", "records"],
+  "properties": {
+    "schema": {
+      "const": "manifestiq-exception-register"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "register_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "exception_id",
+          "title",
+          "status",
+          "scope",
+          "reason",
+          "risk_statement",
+          "compensating_controls",
+          "owner",
+          "approved_by",
+          "approved_role",
+          "approved_at",
+          "expires_at",
+          "review_required_by",
+          "evidence_references",
+          "limitations"
+        ],
+        "properties": {
+          "exception_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "enum": ["approved", "rejected", "expired", "draft", "revoked"]
+          },
+          "scope": {
+            "type": "object",
+            "properties": {
+              "profiles": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "source_paths": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "rule_ids": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "finding_ids": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "gap_ids": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "domains": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "additionalProperties": false
+          },
+          "reason": {
+            "type": "string"
+          },
+          "risk_statement": {
+            "type": "string"
+          },
+          "compensating_controls": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "owner": {
+            "type": "string"
+          },
+          "approved_by": {
+            "type": "string"
+          },
+          "approved_role": {
+            "enum": [
+              "CISO",
+              "CTO",
+              "CTO / Enterprise Architecture",
+              "AppSec",
+              "Security Architecture",
+              "Data Governance",
+              "ITGC / SOX Reviewer",
+              "Legal / Open Source Review",
+              "DevOps / SRE",
+              "Release Manager / Control Owner",
+              "Other"
+            ]
+          },
+          "approved_at": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string"
+          },
+          "review_required_by": {
+            "type": "string"
+          },
+          "evidence_references": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "limitations": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

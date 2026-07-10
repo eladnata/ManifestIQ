@@ -9,6 +9,7 @@ from rich.table import Table
 
 from scanner import __version__
 from scanner.core.orchestrator import run_scan
+from scanner.core.risk_acceptance import apply_exception_register_to_evidence_package
 from scanner.core.workspace import prepare_folder_workspace, prepare_git_workspace, prepare_zip_workspace
 from scanner.governance import (
     collect_sample_scan_evidence,
@@ -46,11 +47,36 @@ def scan_folder(
     path: Path = typer.Option(..., "--path", exists=True, file_okay=False, dir_okay=True, help="Folder to scan"),
     output: Path = typer.Option(..., "--output", help="Output directory"),
     profile: str = typer.Option("enterprise", "--profile", help="Scan profile"),
+    exception_register: Optional[Path] = typer.Option(None, "--exception-register", exists=True, file_okay=True, dir_okay=False, help="Optional local exception register JSON file"),
 ) -> None:
     """Scan a local folder."""
     workspace = prepare_folder_workspace(source_path=path, output_dir=output)
-    result = run_scan(workspace=workspace, profile=profile, scanner_version=__version__)
+    result = run_scan(workspace=workspace, profile=profile, scanner_version=__version__, exception_register=exception_register)
     _print_result(result)
+
+
+@app.command("apply-exceptions")
+def apply_exceptions(
+    evidence_package: Path = typer.Option(..., "--evidence-package", exists=True, file_okay=False, dir_okay=True, help="Existing evidence package directory"),
+    exception_register: Path = typer.Option(..., "--exception-register", exists=True, file_okay=True, dir_okay=False, help="Local exception register JSON file"),
+    output: Path = typer.Option(..., "--output", help="Output evidence package directory"),
+) -> None:
+    """Apply a local risk acceptance register to an existing evidence package."""
+    result = apply_exception_register_to_evidence_package(evidence_package=evidence_package, exception_register=exception_register, output_dir=output)
+    review = result["review"]
+    summary = review["coverage_summary"]
+    table = Table(title="ManifestIQ Risk Acceptance Review")
+    table.add_column("Field")
+    table.add_column("Value")
+    table.add_row("Review Status", str(review["review_status"]))
+    table.add_row("Raw Decision", str(review["raw_decision"]))
+    table.add_row("Raw Score", str(review["raw_score"]))
+    table.add_row("Covered Findings", str(summary["material_findings_covered"]))
+    table.add_row("Uncovered Findings", str(summary["material_findings_uncovered"]))
+    table.add_row("Covered Gaps", str(summary["material_gaps_covered"]))
+    table.add_row("Uncovered Gaps", str(summary["material_gaps_uncovered"]))
+    table.add_row("Review", str(Path(output) / "risk-acceptance-review.json"))
+    console.print(table)
 
 
 @app.command("scan-zip")
