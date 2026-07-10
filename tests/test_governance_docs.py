@@ -17,6 +17,19 @@ GOVERNANCE_DOCS = [
     "docs/governance/RELEASE_HARDENING_SELF_ASSURANCE.md",
 ]
 
+INTERNAL_DOCS = [
+    "docs/internal/README.md",
+    "docs/internal/TRUST_SAFETY_DOCTRINE.md",
+    "docs/internal/EVIDENCE_INTEGRITY_STANDARD.md",
+    "docs/internal/FAILURE_SAFETY_STANDARD.md",
+    "docs/internal/DECISION_SEMANTICS_STANDARD.md",
+    "docs/internal/TRUST_BOUNDARY_AND_NON_CLAIMS.md",
+    "docs/internal/THREAT_AND_MISUSE_MODEL.md",
+    "docs/internal/DATA_PROTECTION_AND_ARTIFACT_HYGIENE.md",
+    "docs/internal/SECURE_ENGINEERING_STANDARD.md",
+    "docs/internal/REGULATORY_AND_GOVERNANCE_ALIGNMENT.md",
+]
+
 ADR_DOCS = [
     "docs/adr/ADR-0001-local-deterministic-non-ai.md",
     "docs/adr/ADR-0002-evidence-first-design.md",
@@ -40,6 +53,11 @@ def test_adr_docs_exist():
         assert Path(doc).exists(), doc
 
 
+def test_internal_doctrine_docs_exist():
+    for doc in INTERNAL_DOCS:
+        assert Path(doc).exists(), doc
+
+
 def test_required_governance_document_headings_exist():
     expected_headings = {
         "docs/governance/SDLC_GOVERNANCE_MODEL.md": ["## Governed Lifecycle", "## Change Types and Required Artifacts"],
@@ -55,6 +73,25 @@ def test_required_governance_document_headings_exist():
         "docs/governance/SECURE_DEVELOPMENT_POLICY.md": ["## Product Security Boundary", "## Safe Handling of Scanned Source Code"],
         "docs/governance/RISK_ACCEPTANCE_EXCEPTION_POLICY.md": ["## Purpose", "## Approval Role Logic", "## Acceptance Criteria"],
         "docs/governance/RELEASE_HARDENING_SELF_ASSURANCE.md": ["## Purpose", "## Local Workflow", "## Acceptance Criteria"],
+    }
+    for doc, headings in expected_headings.items():
+        text = _read(doc)
+        for heading in headings:
+            assert heading in text, f"{heading} missing from {doc}"
+
+
+def test_required_internal_document_headings_exist():
+    expected_headings = {
+        "docs/internal/README.md": ["## Purpose", "## Top-Level Doctrine"],
+        "docs/internal/TRUST_SAFETY_DOCTRINE.md": ["## 1. Purpose", "## 2. Central Principle"],
+        "docs/internal/EVIDENCE_INTEGRITY_STANDARD.md": ["## 1. Purpose", "## 9. Integrity Manifest and Provenance"],
+        "docs/internal/FAILURE_SAFETY_STANDARD.md": ["## 1. Purpose", "## 2. Fail-Closed Rule"],
+        "docs/internal/DECISION_SEMANTICS_STANDARD.md": ["## 1. Purpose", "## 3. `Ready for Review` Is Not Approval"],
+        "docs/internal/TRUST_BOUNDARY_AND_NON_CLAIMS.md": ["## 1. Purpose", "## 7. Data Boundary (No External Transmission)"],
+        "docs/internal/THREAT_AND_MISUSE_MODEL.md": ["## 1. Purpose", "## 5. Misuse and Abuse Scenarios"],
+        "docs/internal/DATA_PROTECTION_AND_ARTIFACT_HYGIENE.md": ["## 1. Purpose", "## 3. Secret and Personal-Data Handling"],
+        "docs/internal/SECURE_ENGINEERING_STANDARD.md": ["## 1. Purpose", "## 2. Dependency Discipline"],
+        "docs/internal/REGULATORY_AND_GOVERNANCE_ALIGNMENT.md": ["## 1. Purpose", "## 3. Alignment Framing"],
     }
     for doc, headings in expected_headings.items():
         text = _read(doc)
