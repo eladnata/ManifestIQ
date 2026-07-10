@@ -67,28 +67,6 @@ def build_claims(signals: list[dict], findings: list[dict], rule_evaluations: di
             signal.get("source_analyzer", "assurance_pipeline"),
         ))
 
-    signal_ids = {signal["signal_id"] for signal in signals}
-    if control_context.get("production_readiness_required") and "ops.backup_restore.detected" not in signal_ids:
-        claims.append(_claim(
-            "Backup/restore readiness could not be established from available evidence.",
-            "operations",
-            "Low",
-            [],
-            [],
-            "claims_engine",
-            ["No backup/restore signal was produced by the current analyzer set."],
-        ))
-    if not control_context.get("languages"):
-        claims.append(_claim(
-            "Primary implementation language could not be established.",
-            "platform",
-            "Low",
-            [],
-            [],
-            "claims_engine",
-            ["No language signal was produced from file inventory."],
-        ))
-
     finding_by_rule = {}
     for finding in findings:
         finding_by_rule.setdefault(finding.get("rule_id"), []).append(finding.get("finding_id"))

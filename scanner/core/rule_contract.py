@@ -47,8 +47,16 @@ def validate_rule_contracts(rulebook: dict, capabilities: list[dict], known_sign
         rule = rules[rule_id]
         rule_errors = []
         rule_warnings = []
+        v2_fields_present = any(
+            key in rule
+            for key in ["required_signals", "requires_analyzers", "if_required_signal_missing", "claim_template", "gap_template", "applies_when"]
+        )
         if not rule.get("rule_id"):
             rule_errors.append("rule_id is required")
+        if v2_fields_present and not rule.get("name"):
+            rule_errors.append("name is required for v2 rule contracts")
+        if v2_fields_present and not rule.get("category"):
+            rule_errors.append("category is required for v2 rule contracts")
         if rule.get("severity") not in VALID_SEVERITIES:
             rule_errors.append("severity must be one of Critical, High, Medium, Low, Info")
         if _decision(rule) not in VALID_DECISION_IMPACTS:
