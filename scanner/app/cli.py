@@ -21,6 +21,7 @@ from scanner.governance import (
     prepare_release_evidence,
     run_governance_checks,
 )
+from scanner.ui import build_board_verdict_view, render_executive_cockpit_html
 from scanner.validation.goldset import compare_goldset
 from scanner.validation.portfolio import aggregate_portfolio
 from scanner.validation.runner import run_validation_suite
@@ -368,4 +369,26 @@ def trust_safety_check_command(
     table.add_row("Blocking Gaps", str(len(review["blocking_gaps"])))
     table.add_row("Warnings", str(len(review["warnings"])))
     table.add_row("Summary", str(output / "trust-safety-review.json"))
+    console.print(table)
+
+
+@app.command("render-gui")
+def render_gui_command(
+    evidence_package: Path = typer.Option(..., "--evidence-package", exists=True, file_okay=False, dir_okay=True, help="Evidence package directory to render"),
+    output: Path = typer.Option(Path("gui-output"), "--output", help="Output directory for the rendered GUI"),
+) -> None:
+    """Render the local, read-only Board Verdict Room from an existing evidence package."""
+    view = build_board_verdict_view(evidence_package)
+    document = render_executive_cockpit_html(view)
+    output.mkdir(parents=True, exist_ok=True)
+    out_path = output / "manifestiq-executive-cockpit.html"
+    out_path.write_text(document, encoding="utf-8")
+
+    table = Table(title="ManifestIQ Executive Cockpit — Board Verdict Room")
+    table.add_column("Field")
+    table.add_column("Value")
+    table.add_row("Visible Decision", str(view["visible_decision"]))
+    table.add_row("Human Approval", str(view["layers"]["human_approval"]["display"]))
+    table.add_row("Limitations", str(len(view["limitations"])))
+    table.add_row("Output", str(out_path))
     console.print(table)
