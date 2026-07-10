@@ -10,7 +10,13 @@ from rich.table import Table
 from scanner import __version__
 from scanner.core.orchestrator import run_scan
 from scanner.core.workspace import prepare_folder_workspace, prepare_git_workspace, prepare_zip_workspace
-from scanner.governance import collect_test_evidence, generate_release_evidence, prepare_release_evidence, run_governance_checks
+from scanner.governance import (
+    collect_sample_scan_evidence,
+    collect_test_evidence,
+    generate_release_evidence,
+    prepare_release_evidence,
+    run_governance_checks,
+)
 from scanner.validation.goldset import compare_goldset
 from scanner.validation.portfolio import aggregate_portfolio
 from scanner.validation.runner import run_validation_suite
@@ -244,4 +250,27 @@ def collect_test_evidence_command(
     table.add_row("Duration Seconds", str(summary["duration_seconds"]))
     table.add_row("Source", str(summary["source"]))
     table.add_row("Summary", str(output / "test_result_summary.json"))
+    console.print(table)
+
+
+@app.command("collect-scan-evidence")
+def collect_scan_evidence_command(
+    evidence_package: Path = typer.Option(..., "--evidence-package", file_okay=False, dir_okay=True, help="Scanner evidence package directory to parse"),
+    command: str = typer.Option(..., "--command", help="Exact scanner command that produced the evidence package"),
+    output: Path = typer.Option(Path("governance-output"), "--output", help="Output directory for sample scan evidence summary"),
+) -> None:
+    """Generate sample_scan_summary.json from a real scanner evidence package."""
+    summary = collect_sample_scan_evidence(evidence_package=evidence_package, command=command, output_dir=output)
+    table = Table(title="Enterprise Code Assurance Sample Scan Evidence")
+    table.add_column("Field")
+    table.add_column("Value")
+    table.add_row("Status", str(summary["status"]))
+    table.add_row("Decision", str(summary["decision"]))
+    table.add_row("Score", str(summary["score"]))
+    table.add_row("Critical", str(summary["critical"]))
+    table.add_row("High", str(summary["high"]))
+    table.add_row("Medium", str(summary["medium"]))
+    table.add_row("Low", str(summary["low"]))
+    table.add_row("Summary", str(output / "sample_scan_summary.json"))
+    table.add_row("Notes", str(len(summary["notes"])))
     console.print(table)

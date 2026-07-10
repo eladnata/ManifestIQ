@@ -9,7 +9,7 @@
   "evidence_inputs": {
     "governance_check_report": "governance-output/governance-check-report.json",
     "test_result_summary": "governance-output/test_result_summary.json",
-    "sample_scan_summary": "governance/examples/sample-scan-summary.json",
+    "sample_scan_summary": "governance-output/sample_scan_summary.json",
     "adversarial_validation_report": null,
     "goldset_comparison_report": null,
     "portfolio_validation_report": null,
