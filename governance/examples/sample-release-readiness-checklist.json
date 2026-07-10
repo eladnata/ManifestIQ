@@ -1,0 +1,54 @@
+{
+  "schema": "manifestiq-release-readiness-checklist",
+  "schema_version": "0.1",
+  "generated_at": "2026-07-10T00:00:00Z",
+  "items": [
+    {
+      "item_id": "GOV-001",
+      "category": "Governance",
+      "description": "Governance check report exists",
+      "status": "passed",
+      "evidence_reference": "governance-output/governance-check-report.json",
+      "required": true
+    },
+    {
+      "item_id": "TEST-001",
+      "category": "Testing",
+      "description": "Test result summary exists",
+      "status": "passed",
+      "evidence_reference": "governance-output/test_result_summary.json",
+      "required": true
+    },
+    {
+      "item_id": "TEST-002",
+      "category": "Testing",
+      "description": "Tests passed",
+      "status": "passed",
+      "evidence_reference": "governance-output/test_result_summary.json",
+      "required": true
+    },
+    {
+      "item_id": "SCAN-001",
+      "category": "Evidence",
+      "description": "Sample scan summary exists",
+      "status": "passed",
+      "evidence_reference": "governance-output/sample_scan_summary.json",
+      "required": true
+    },
+    {
+      "item_id": "REL-003",
+      "category": "Release",
+      "description": "Release decision is not auto-approved",
+      "status": "passed",
+      "evidence_reference": null,
+      "required": true
+    }
+  ],
+  "summary": {
+    "required_total": 5,
+    "required_passed": 5,
+    "required_failed": 0,
+    "warnings": 0,
+    "status": "Ready for Review"
+  }
+}

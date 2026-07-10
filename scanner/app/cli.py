@@ -12,9 +12,11 @@ from scanner.core.orchestrator import run_scan
 from scanner.core.risk_acceptance import apply_exception_register_to_evidence_package
 from scanner.core.workspace import prepare_folder_workspace, prepare_git_workspace, prepare_zip_workspace
 from scanner.governance import (
+    collect_self_assurance,
     collect_sample_scan_evidence,
     collect_test_evidence,
     generate_release_evidence,
+    prepare_release_candidate,
     prepare_release_evidence,
     run_governance_checks,
 )
@@ -299,4 +301,51 @@ def collect_scan_evidence_command(
     table.add_row("Low", str(summary["low"]))
     table.add_row("Summary", str(output / "sample_scan_summary.json"))
     table.add_row("Notes", str(len(summary["notes"])))
+    console.print(table)
+
+
+@app.command("collect-self-assurance")
+def collect_self_assurance_command(
+    evidence_package: Path = typer.Option(..., "--evidence-package", exists=True, file_okay=False, dir_okay=True, help="Self-scan evidence package directory"),
+    output: Path = typer.Option(Path("release-candidate-output"), "--output", help="Output directory for self-assurance summary"),
+) -> None:
+    """Summarize a local ManifestIQ self-scan evidence package."""
+    summary = collect_self_assurance(evidence_package=evidence_package, output_dir=output)
+    table = Table(title="ManifestIQ Self-Assurance Summary")
+    table.add_column("Field")
+    table.add_column("Value")
+    table.add_row("Status", str(summary["self_assurance_status"]))
+    table.add_row("Decision", str(summary["self_scan"]["decision"]))
+    table.add_row("Score", str(summary["self_scan"]["score"]))
+    table.add_row("Critical", str(summary["self_scan"]["critical"]))
+    table.add_row("High", str(summary["self_scan"]["high"]))
+    table.add_row("Summary", str(output / "self-assurance-summary.json"))
+    console.print(table)
+
+
+@app.command("prepare-release-candidate")
+def prepare_release_candidate_command(
+    release_manifest: Optional[Path] = typer.Option(None, "--release-manifest", file_okay=True, dir_okay=False, help="Optional release manifest JSON file"),
+    governance_output: Path = typer.Option(Path("governance-output"), "--governance-output", help="Directory containing governance evidence outputs"),
+    self_scan_output: Path = typer.Option(Path("release-candidate-output"), "--self-scan-output", help="Directory containing self-assurance-summary.json"),
+    output: Path = typer.Option(Path("release-candidate-output"), "--output", help="Output directory for release candidate artifacts"),
+) -> None:
+    """Prepare local release candidate evidence for expert review."""
+    result = prepare_release_candidate(
+        release_manifest=release_manifest,
+        governance_output=governance_output,
+        self_scan_output=self_scan_output,
+        output_dir=output,
+    )
+    summary = result["summary"]
+    table = Table(title="ManifestIQ Release Candidate")
+    table.add_column("Field")
+    table.add_column("Value")
+    table.add_row("Release Candidate", str(summary["release_candidate_id"]))
+    table.add_row("Readiness", str(summary["release_readiness"]["status"]))
+    table.add_row("Governance", str(summary["evidence_status"]["governance"]))
+    table.add_row("Tests", str(summary["evidence_status"]["tests"]))
+    table.add_row("Sample Scan", str(summary["evidence_status"]["sample_scan"]))
+    table.add_row("Self Assurance", str(summary["evidence_status"]["self_assurance"]))
+    table.add_row("Summary", str(output / "release-candidate-summary.json"))
     console.print(table)

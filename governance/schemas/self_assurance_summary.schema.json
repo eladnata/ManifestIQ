@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ManifestIQ Self-Assurance Summary",
+  "type": "object",
+  "required": ["schema", "schema_version", "generated_at", "self_scan", "expected_artifacts", "self_assurance_status", "blocking_reasons", "warnings", "limitations", "non_claims"],
+  "properties": {
+    "schema": { "const": "manifestiq-self-assurance-summary" },
+    "schema_version": { "const": "0.1" },
+    "generated_at": { "type": "string" },
+    "self_scan": {
+      "type": "object",
+      "required": ["source_path", "profile", "decision", "score", "critical", "high", "medium", "low", "evidence_package_path", "decision_packet_path", "risk_acceptance_review_path"]
+    },
+    "expected_artifacts": {
+      "type": "object",
+      "required": ["manifest", "scan_summary", "decision_packet", "system_dossier", "evidence_graph", "acceptance_matrix"]
+    },
+    "self_assurance_status": { "enum": ["passed", "failed", "warning", "unknown"] },
+    "blocking_reasons": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "non_claims": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
