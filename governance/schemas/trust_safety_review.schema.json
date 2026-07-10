@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ManifestIQ Trust Safety Review",
+  "type": "object",
+  "required": [
+    "schema",
+    "schema_version",
+    "generated_at",
+    "review_status",
+    "domains",
+    "blocking_gaps",
+    "warnings",
+    "limitations",
+    "non_claims"
+  ],
+  "properties": {
+    "schema": { "const": "manifestiq-trust-safety-review" },
+    "schema_version": { "const": "0.1" },
+    "generated_at": { "type": "string" },
+    "review_status": { "enum": ["Passed", "Warning", "Failed", "Not Evaluated"] },
+    "domains": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["domain", "status", "evidence_references", "findings", "required_actions"],
+        "properties": {
+          "domain": { "type": "string" },
+          "status": { "enum": ["passed", "warning", "failed", "unknown"] },
+          "evidence_references": { "type": "array", "items": { "type": "string" } },
+          "findings": { "type": "array", "items": { "type": "string" } },
+          "required_actions": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "blocking_gaps": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "non_claims": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

@@ -15,6 +15,7 @@ from scanner.governance import (
     collect_self_assurance,
     collect_sample_scan_evidence,
     collect_test_evidence,
+    collect_trust_safety_review,
     generate_release_evidence,
     prepare_release_candidate,
     prepare_release_evidence,
@@ -348,4 +349,23 @@ def prepare_release_candidate_command(
     table.add_row("Sample Scan", str(summary["evidence_status"]["sample_scan"]))
     table.add_row("Self Assurance", str(summary["evidence_status"]["self_assurance"]))
     table.add_row("Summary", str(output / "release-candidate-summary.json"))
+    console.print(table)
+
+
+@app.command("trust-safety-check")
+def trust_safety_check_command(
+    repo_root: Path = typer.Option(Path("."), "--repo-root", exists=True, file_okay=False, dir_okay=True, help="Repository root containing docs/internal"),
+    evidence_package: Optional[Path] = typer.Option(None, "--evidence-package", exists=True, file_okay=False, dir_okay=True, help="Optional evidence package directory for integrity checks"),
+    output: Path = typer.Option(Path("trust-safety-output"), "--output", help="Output directory for trust safety review"),
+) -> None:
+    """Run deterministic local trust-safety checks for internal doctrine and evidence boundaries."""
+    review = collect_trust_safety_review(repo_root=repo_root, evidence_package=evidence_package, output_dir=output)
+    table = Table(title="ManifestIQ Trust Safety Review")
+    table.add_column("Field")
+    table.add_column("Value")
+    table.add_row("Review Status", str(review["review_status"]))
+    table.add_row("Domains", str(len(review["domains"])))
+    table.add_row("Blocking Gaps", str(len(review["blocking_gaps"])))
+    table.add_row("Warnings", str(len(review["warnings"])))
+    table.add_row("Summary", str(output / "trust-safety-review.json"))
     console.print(table)
