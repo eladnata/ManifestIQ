@@ -1,0 +1,31 @@
+.integrity-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-strong);
+  white-space: nowrap;
+}
+
+.integrity-indicator__label {
+  font-size: var(--text-sm);
+}
+
+.integrity-indicator--integrity {
+  color: var(--color-integrity-green);
+  background: var(--color-integrity-bg);
+  border-color: var(--color-integrity-green);
+}
+
+.integrity-indicator--caution {
+  color: var(--color-caution-amber);
+  background: var(--color-caution-bg);
+  border-color: var(--color-caution-amber);
+}
+
+.integrity-indicator--unknown {
+  color: var(--color-unknown-gray);
+  background: var(--color-surface-2);
+}

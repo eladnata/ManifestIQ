@@ -1,0 +1,137 @@
+.scan-run-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 760px;
+}
+
+.scan-run-progress__headline {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: var(--space-2) 0 0;
+}
+
+.scan-run-progress__sub {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.scan-run-progress__stages {
+  display: flex;
+  flex-direction: column;
+}
+
+.scan-stage {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+
+.scan-stage:first-child {
+  border-top: none;
+}
+
+.scan-stage__marker {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  background: var(--color-unknown-gray);
+}
+
+/* Stage completion is never green — green is reserved for evidence
+   integrity at manifest sealing only, never for stage success. */
+.scan-stage--complete .scan-stage__marker {
+  background: var(--color-review-slate);
+}
+
+.scan-stage--running .scan-stage__marker {
+  background: var(--color-review-slate);
+  animation: scan-stage-pulse 1.6s ease-in-out infinite;
+}
+
+.scan-stage--warning .scan-stage__marker {
+  background: var(--color-caution-amber);
+}
+
+.scan-stage--failed_closed .scan-stage__marker {
+  background: var(--color-critical-red);
+}
+
+@keyframes scan-stage-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scan-stage--running .scan-stage__marker {
+    animation: none;
+  }
+}
+
+.scan-stage__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scan-stage__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.scan-stage__label {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+}
+
+.scan-stage__state {
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  font-weight: var(--weight-medium);
+}
+
+.scan-stage--complete .scan-stage__state {
+  color: var(--color-review-slate);
+}
+
+.scan-stage--warning .scan-stage__state {
+  color: var(--color-caution-amber);
+}
+
+.scan-stage--failed_closed .scan-stage__state {
+  color: var(--color-critical-red);
+}
+
+.scan-stage__explanation {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.scan-stage__artifacts {
+  margin: 2px 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+}
+
+.scan-run-progress__error {
+  padding: var(--space-4) var(--space-5);
+}
+
+.scan-run-progress__error-text {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}

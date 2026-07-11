@@ -1,0 +1,74 @@
+/* Defines --footer-height so layout.css reserves matching bottom clearance
+   in .room, keeping the fixed footer from overlapping content. */
+:root {
+  --footer-height: 60px;
+}
+
+.nonclaims {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: var(--footer-height);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border-strong);
+  box-shadow: 0 -1px 2px rgba(58, 48, 28, 0.04);
+  z-index: 20;
+}
+
+.nonclaims__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  padding: var(--space-3) var(--gutter);
+  flex-wrap: wrap;
+  min-height: var(--footer-height);
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.nonclaims__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-critical-red);
+  font-weight: var(--weight-bold);
+}
+
+.nonclaims__label::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-critical-red);
+}
+
+.nonclaims__item {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  position: relative;
+}
+
+.nonclaims__item + .nonclaims__item {
+  padding-left: var(--space-5);
+}
+
+.nonclaims__item + .nonclaims__item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 12px;
+  background: var(--color-border-strong);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --footer-height: 96px;
+  }
+}

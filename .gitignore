@@ -44,6 +44,9 @@ release-output/
 scanner-output/
 self-assurance-output/
 release-candidate-output/
+trust-safety-output/
+gui-runs/
+gui-output/
 
 # Logs and temp files
 *.log
