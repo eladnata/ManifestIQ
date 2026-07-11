@@ -16,6 +16,7 @@ import {
   type RunStatus,
   type SourceType,
 } from "./lib/apiClient";
+import { deriveJourneyState, shouldAdvanceFromScan } from "./lib/runJourney";
 
 const ROOM_NAMES: Record<Station, string> = {
   launch: "Assessment Launch",
@@ -76,6 +77,7 @@ export function App(): ReactElement {
 
   const [run, setRun] = useState<RunStatus | null>(null);
   const [boardVerdict, setBoardVerdict] = useState<BoardVerdictData | null>(null);
+  const journeyState = deriveJourneyState(run, boardVerdict);
 
   const resumedRef = useRef(false);
 
@@ -91,11 +93,9 @@ export function App(): ReactElement {
     if (!initial.runId) return;
 
     getRun(initial.runId)
-      .then(async (fetchedRun) => {
+      .then((fetchedRun) => {
         setRun(fetchedRun);
-        if (fetchedRun.status === "sealed") {
-          const data = await getBoardVerdictData<BoardVerdictData>(initial.runId as string);
-          setBoardVerdict(data);
+        if (fetchedRun.journey_state === "evidence_sealed" || fetchedRun.journey_state === "verdict_ready") {
           setStation(initial.station === "verdict" ? "verdict" : "sealed");
         } else {
           setStation("scan");
@@ -119,10 +119,7 @@ export function App(): ReactElement {
         const updated = await getRun(runId);
         if (cancelled) return;
         setRun(updated);
-        if (updated.status === "sealed") {
-          const data = await getBoardVerdictData<BoardVerdictData>(runId);
-          if (cancelled) return;
-          setBoardVerdict(data);
+        if (shouldAdvanceFromScan(deriveJourneyState(updated, null))) {
           setStation("sealed");
         }
       } catch {
@@ -136,6 +133,30 @@ export function App(): ReactElement {
       window.clearInterval(interval);
     };
   }, [runId, station, run]);
+
+  useEffect(() => {
+    if (!runId || !run?.board_verdict_ready || boardVerdict !== null) return;
+    let cancelled = false;
+    getBoardVerdictData<BoardVerdictData>(runId)
+      .then((data) => {
+        if (!cancelled) {
+          setBoardVerdict(data);
+        }
+      })
+      .catch(() => {
+        // Leave the user on the sealed station and try again if they continue
+        // navigating; verdict data loading must never block the Scan -> Seal step.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [runId, run?.board_verdict_ready, boardVerdict]);
+
+  useEffect(() => {
+    if (station === "scan" && shouldAdvanceFromScan(journeyState)) {
+      setStation("sealed");
+    }
+  }, [journeyState, station]);
 
   async function handleLaunch(type: SourceType, value: string, chosenProfile: string): Promise<void> {
     setSourceType(type);
@@ -177,7 +198,7 @@ export function App(): ReactElement {
       />
     );
   } else if (station === "scan") {
-    content = <ScanRunProgress run={run} />;
+    content = <ScanRunProgress run={run} onContinueToSeal={shouldAdvanceFromScan(journeyState) ? () => setStation("sealed") : null} />;
   } else if (station === "sealed") {
     content = run ? (
       <EvidenceSealed run={run} limitations={boardVerdict?.limitations ?? []} onOpenVerdict={() => setStation("verdict")} />
@@ -198,7 +219,7 @@ export function App(): ReactElement {
       integrity={integrityForShell}
       manifestHash={manifestHashForShell}
       nonClaims={nonClaimsForShell}
-      rail={<WorkflowRail current={station} />}
+      rail={<WorkflowRail current={station} journeyState={journeyState} />}
     >
       {content}
     </AppShell>

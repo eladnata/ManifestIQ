@@ -50,46 +50,59 @@ export function PreflightGate({ preflight, loading, onStartScan, onBack, startin
       ) : (
         <>
           <Surface variant="raised" className="preflight-gate__state-card" tone={STATE_TONE[preflight.state]}>
-            <StatusPill label={STATE_LABEL[preflight.state]} tone={STATE_TONE[preflight.state]} />
+            <div className="preflight-gate__state-head">
+              <div>
+                <span className="type-eyebrow">Preflight readiness</span>
+                <h2 className="preflight-gate__state-title">{STATE_LABEL[preflight.state]}</h2>
+              </div>
+              <StatusPill label={STATE_LABEL[preflight.state]} tone={STATE_TONE[preflight.state]} />
+            </div>
             <p className="preflight-gate__state-note">
               This confirms the assessment can run deterministically and locally. It is not a security
               approval and confers none.
             </p>
           </Surface>
 
-          <Surface variant="flush" className="preflight-gate__checks">
-            {preflight.checks.map((check) => (
-              <div key={check.id} className="preflight-gate__check-row">
-                <StatusPill label={check.status === "pass" ? "Pass" : check.status === "warning" ? "Note" : "Blocked"} tone={CHECK_TONE[check.status]} />
-                <div className="preflight-gate__check-body">
-                  <span className="preflight-gate__check-label">{check.label}</span>
-                  <span className="preflight-gate__check-detail">{check.detail}</span>
-                </div>
+          <div className="preflight-gate__grid">
+            <Surface variant="flush" className="preflight-gate__checks">
+              <div className="preflight-gate__section-head">
+                <span className="type-eyebrow">Readiness checks</span>
               </div>
-            ))}
-          </Surface>
-
-          {preflight.blockers.length > 0 && (
-            <Surface variant="inset" className="preflight-gate__blockers">
-              <span className="type-eyebrow">Blockers</span>
-              <ul className="preflight-gate__blocker-list">
-                {preflight.blockers.map((b) => (
-                  <li key={b}>{b}</li>
-                ))}
-              </ul>
-            </Surface>
-          )}
-
-          <Surface variant="inset" className="preflight-gate__artifacts">
-            <span className="type-eyebrow">Expected artifacts</span>
-            <div className="preflight-gate__artifact-chips">
-              {preflight.expected_artifacts.map((artifact) => (
-                <span key={artifact} className="type-mono preflight-gate__artifact-chip">
-                  {artifact}
-                </span>
+              {preflight.checks.map((check) => (
+                <div key={check.id} className="preflight-gate__check-row">
+                  <StatusPill label={check.status === "pass" ? "Pass" : check.status === "warning" ? "Note" : "Blocked"} tone={CHECK_TONE[check.status]} />
+                  <div className="preflight-gate__check-body">
+                    <span className="preflight-gate__check-label">{check.label}</span>
+                    <span className="preflight-gate__check-detail">{check.detail}</span>
+                  </div>
+                </div>
               ))}
+            </Surface>
+
+            <div className="preflight-gate__side">
+              {preflight.blockers.length > 0 && (
+                <Surface variant="inset" className="preflight-gate__blockers">
+                  <span className="type-eyebrow">Blockers</span>
+                  <ul className="preflight-gate__blocker-list">
+                    {preflight.blockers.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                </Surface>
+              )}
+
+              <Surface variant="inset" className="preflight-gate__artifacts">
+                <span className="type-eyebrow">Expected artifacts</span>
+                <div className="preflight-gate__artifact-chips">
+                  {preflight.expected_artifacts.map((artifact) => (
+                    <span key={artifact} className="type-mono preflight-gate__artifact-chip">
+                      {artifact}
+                    </span>
+                  ))}
+                </div>
+              </Surface>
             </div>
-          </Surface>
+          </div>
 
           <div className="preflight-gate__actions">
             <Button variant="secondary" onClick={onBack}>

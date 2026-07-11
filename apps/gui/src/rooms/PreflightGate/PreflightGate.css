@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
-  max-width: 760px;
+  max-width: 980px;
 }
 
 .preflight-gate__headline {
@@ -18,11 +18,25 @@
 }
 
 .preflight-gate__state-card {
-  padding: var(--space-5) var(--space-6);
+  padding: var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
+  align-items: stretch;
+}
+
+.preflight-gate__state-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
   align-items: flex-start;
+}
+
+.preflight-gate__state-title {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  color: var(--color-text);
 }
 
 .preflight-gate__state-note {
@@ -31,9 +45,23 @@
   color: var(--color-text-muted);
 }
 
+.preflight-gate__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.95fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
 .preflight-gate__checks {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.preflight-gate__section-head {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  background: rgba(240, 236, 226, 0.45);
 }
 
 .preflight-gate__check-row {
@@ -83,6 +111,12 @@
   padding: var(--space-4) var(--space-5);
 }
 
+.preflight-gate__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
 .preflight-gate__artifact-chips {
   margin-top: var(--space-2);
   display: flex;
@@ -102,4 +136,14 @@
 .preflight-gate__actions {
   display: flex;
   gap: var(--space-3);
+}
+
+@media (max-width: 900px) {
+  .preflight-gate__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .preflight-gate__state-head {
+    flex-direction: column;
+  }
 }

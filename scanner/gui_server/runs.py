@@ -25,6 +25,8 @@ EXPECTED_ARTIFACTS = [
     "board-verdict-data.json",
 ]
 
+JourneyState = str
+
 # Stage -> real evidence-artifact markers, in the order those artifacts are
 # actually written by scanner.core.orchestrator.run_scan. This module never
 # modifies run_scan; stage progress is derived purely by observing which
@@ -211,6 +213,38 @@ def compute_stages(evidence_dir: Path, *, finished: bool) -> list[dict[str, Any]
     return stages
 
 
+def derive_run_journey_state(
+    *,
+    status: str,
+    stages: list[dict[str, Any]],
+    integrity: dict[str, Any] | None,
+    manifest_hash: str | None,
+    board_verdict_ready: bool,
+) -> str:
+    """
+    Guided GUI lifecycle states for Phase 17A.1.
+
+    These states are intentionally more specific than the low-level run
+    status so the frontend can move the user through Scan -> Seal -> Verdict
+    without inferring progress from visual stage completion alone.
+    """
+    if status == "failed":
+        return "scan_failed_closed"
+
+    all_complete = all(stage.get("state") == "complete" for stage in stages)
+    all_before_seal_complete = all(
+        stage.get("state") == "complete" for stage in stages if stage.get("id") != "manifest_sealing"
+    )
+    seal_complete = any(stage.get("id") == "manifest_sealing" and stage.get("state") == "complete" for stage in stages)
+    evidence_verified = integrity is not None and bool(manifest_hash) and integrity.get("state") == "Verified"
+
+    if status == "sealed" and seal_complete and evidence_verified:
+        return "verdict_ready" if board_verdict_ready else "evidence_sealed"
+    if all_complete or all_before_seal_complete:
+        return "scan_complete_unsealed"
+    return "scan_running"
+
+
 class RunManager:
     """
     Manages local assessment runs for the GUI workbench. Never duplicates
@@ -309,18 +343,30 @@ class RunManager:
 
         integrity = None
         manifest_hash = None
+        board_verdict_ready = False
         if record["status"] == "sealed":
             data_path = Path(record["run_dir"]) / "board-verdict-data.json"
             if data_path.is_file():
                 contract = json.loads(data_path.read_text(encoding="utf-8"))
                 integrity = contract.get("integrity")
                 manifest_hash = contract.get("manifest_hash")
+                board_verdict_ready = True
+
+        journey_state = derive_run_journey_state(
+            status=record["status"],
+            stages=stages,
+            integrity=integrity,
+            manifest_hash=manifest_hash,
+            board_verdict_ready=board_verdict_ready,
+        )
+        next_station = "sealed" if journey_state in {"evidence_sealed", "verdict_ready"} else None
 
         return {
             "schema": "manifestiq-run-status",
             "schema_version": "0.1",
             "run_id": run_id,
             "status": record["status"],
+            "journey_state": journey_state,
             "source_type": record["source_type"],
             "profile": record["profile"],
             "run_dir": record["run_dir"],
@@ -331,6 +377,8 @@ class RunManager:
             "stages": stages,
             "integrity": integrity,
             "manifest_hash": manifest_hash,
+            "board_verdict_ready": board_verdict_ready,
+            "next_station": next_station,
             "non_claims": list(NON_CLAIMS),
         }
 

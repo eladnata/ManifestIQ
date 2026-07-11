@@ -1,5 +1,7 @@
 .workflow-rail {
-  padding: var(--space-6) 0;
+  padding: var(--space-4) 0;
+  position: sticky;
+  top: var(--space-5);
 }
 
 .workflow-rail__list {
@@ -8,24 +10,25 @@
   padding: 0;
   display: flex;
   flex-direction: column;
+  gap: var(--space-2);
 }
 
 .workflow-rail__item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-3);
-  padding: var(--space-3) 0;
+  padding: var(--space-3) var(--space-3) var(--space-3) 0;
   position: relative;
 }
 
 .workflow-rail__item + .workflow-rail__item::before {
   content: "";
   position: absolute;
-  left: 11px;
-  top: -8px;
+  left: 13px;
+  top: -10px;
   width: 1px;
-  height: 8px;
-  background: var(--color-border-strong);
+  height: 12px;
+  background: linear-gradient(180deg, rgba(184, 171, 140, 0.12), rgba(184, 171, 140, 0.7));
 }
 
 .workflow-rail__marker {
@@ -38,15 +41,19 @@
   border-radius: 50%;
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid rgba(184, 171, 140, 0.72);
   color: var(--color-text-faint);
-  background: var(--color-surface);
+  background: rgba(253, 252, 249, 0.8);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
 .workflow-rail__label {
   font-size: var(--text-sm);
   color: var(--color-text-faint);
   font-weight: var(--weight-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding-top: 4px;
 }
 
 .workflow-rail__item--done .workflow-rail__marker {
@@ -63,9 +70,57 @@
   background: var(--color-brand-gold);
   border-color: var(--color-brand-gold);
   font-weight: var(--weight-bold);
+  box-shadow: 0 0 0 6px var(--color-brand-glow);
 }
 
 .workflow-rail__item--current .workflow-rail__label {
   color: var(--color-text);
   font-weight: var(--weight-bold);
+}
+
+.workflow-rail__item--available .workflow-rail__marker {
+  color: var(--color-review-slate);
+  border-color: var(--color-review-slate);
+  background: color-mix(in srgb, var(--color-review-slate) 12%, var(--color-surface));
+}
+
+.workflow-rail__item--available .workflow-rail__label {
+  color: var(--color-text-muted);
+  font-weight: var(--weight-medium);
+}
+
+.workflow-rail__item--failed .workflow-rail__marker {
+  color: var(--color-surface);
+  background: var(--color-critical-red);
+  border-color: var(--color-critical-red);
+}
+
+.workflow-rail__item--failed .workflow-rail__label {
+  color: var(--color-critical-red);
+  font-weight: var(--weight-bold);
+}
+
+@media (max-width: 900px) {
+  .workflow-rail {
+    position: static;
+    overflow-x: auto;
+  }
+
+  .workflow-rail__list {
+    flex-direction: row;
+    gap: var(--space-4);
+    padding-bottom: var(--space-3);
+  }
+
+  .workflow-rail__item {
+    min-width: max-content;
+    padding-right: var(--space-2);
+  }
+
+  .workflow-rail__item + .workflow-rail__item::before {
+    left: -10px;
+    top: 12px;
+    width: 10px;
+    height: 1px;
+  }
 }

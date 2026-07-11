@@ -5,8 +5,9 @@
   tokens. Where a value differs from the doctrine, the doctrine wins; fix
   this file, not the other way around.
 
-  Default shipped mode is light luxury mode (warm off-white, graphite text).
-  Dark values are retained for prefers-color-scheme responsiveness only.
+  Default shipped mode is the ManifestIQ brand theme (warm off-white,
+  graphite text, muted gold, slate technical accents). Product identity must
+  not follow system theme automatically.
 */
 
 :root {
@@ -18,6 +19,7 @@
   --color-bg: #f3f0e8;
   --color-surface: #fdfcf9;
   --color-surface-2: #f0ece2;
+  --color-surface-3: #ebe5d8;
 
   /* Text — graphite, warmed slightly to sit on the warm canvas */
   --color-text: #1f2226;
@@ -27,9 +29,11 @@
   /* Border — warm hairlines, not cool gray */
   --color-border: #e4ded1;
   --color-border-strong: #d2c9b7;
+  --color-border-accent: #b8ab8c;
 
   /* Brand & status — brand gold is identity only, never a status */
   --color-brand-gold: #9a7b34;
+  --color-brand-gold-soft: #b59a64;
   --color-critical-red: #9c2027;
   --color-caution-amber: #8a5d00;
   --color-review-slate: #2f5b8a;
@@ -40,6 +44,8 @@
   --color-caution-bg: #f7efdd;
   --color-review-bg: #e7eff7;
   --color-integrity-bg: #e4f1eb;
+  --color-brand-glow: rgba(154, 123, 52, 0.14);
+  --color-ink-shadow: rgba(58, 48, 28, 0.1);
 
   /* Spacing scale (4px base) */
   --space-0: 0;
@@ -81,12 +87,14 @@
   --radius-sm: 3px;
   --radius: 4px;
   --radius-md: 6px;
+  --radius-lg: 8px;
   --radius-pill: 100px;
 
   /* Shadows — premium restraint, warm-tinted to sit on the warm canvas */
   --shadow-0: none;
   --shadow-1: 0 1px 2px rgba(58, 48, 28, 0.05), 0 1px 1px rgba(58, 48, 28, 0.04);
   --shadow-2: 0 12px 32px -12px rgba(58, 48, 28, 0.16), 0 2px 6px rgba(58, 48, 28, 0.05);
+  --shadow-3: 0 22px 44px -24px rgba(58, 48, 28, 0.22), 0 10px 18px -12px rgba(58, 48, 28, 0.12);
 
   /* Icon sizes */
   --icon-sm: 14px;
@@ -107,29 +115,4 @@
   --motion-fast: 120ms;
   --motion-base: 180ms;
   --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
-}
-
-/* Dark values retained per DESIGN_TOKENS.md. Light luxury mode is the
-   shipped default look for the Board Verdict Room. */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0f151b;
-    --color-surface: #151d25;
-    --color-surface-2: #111820;
-    --color-text: #e7edf3;
-    --color-text-muted: #9fb0bf;
-    --color-text-faint: #6f8091;
-    --color-border: #25313c;
-    --color-border-strong: #324150;
-    --color-brand-gold: #c9a75a;
-    --color-critical-red: #e07b82;
-    --color-caution-amber: #d7a94b;
-    --color-review-slate: #8fb4dc;
-    --color-integrity-green: #6fc4a0;
-    --color-unknown-gray: #8496a4;
-    --color-critical-bg: #2a171a;
-    --color-caution-bg: #241d10;
-    --color-review-bg: #14202c;
-    --color-integrity-bg: #122019;
-  }
 }
