@@ -1,0 +1,105 @@
+.preflight-gate {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 760px;
+}
+
+.preflight-gate__headline {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: var(--space-2) 0 0;
+}
+
+.preflight-gate__loading {
+  padding: var(--space-6);
+}
+
+.preflight-gate__state-card {
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+
+.preflight-gate__state-note {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.preflight-gate__checks {
+  display: flex;
+  flex-direction: column;
+}
+
+.preflight-gate__check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+
+.preflight-gate__check-row:first-child {
+  border-top: none;
+}
+
+.preflight-gate__check-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.preflight-gate__check-label {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+}
+
+.preflight-gate__check-detail {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.preflight-gate__blockers {
+  padding: var(--space-4) var(--space-5);
+}
+
+.preflight-gate__blocker-list {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-critical-red);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.preflight-gate__artifacts {
+  padding: var(--space-4) var(--space-5);
+}
+
+.preflight-gate__artifact-chips {
+  margin-top: var(--space-2);
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.preflight-gate__artifact-chip {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-surface);
+}
+
+.preflight-gate__actions {
+  display: flex;
+  gap: var(--space-3);
+}

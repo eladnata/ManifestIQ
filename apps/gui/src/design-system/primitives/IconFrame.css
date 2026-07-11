@@ -1,0 +1,45 @@
+.icon-frame {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.icon-frame--sm {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+
+.icon-frame--md {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}
+
+.icon-frame--lg {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+}
+
+.icon-frame--critical {
+  color: var(--color-critical-red);
+}
+
+.icon-frame--caution {
+  color: var(--color-caution-amber);
+}
+
+.icon-frame--review {
+  color: var(--color-review-slate);
+}
+
+.icon-frame--integrity {
+  color: var(--color-integrity-green);
+}
+
+.icon-frame--unknown {
+  color: var(--color-unknown-gray);
+}
+
+.icon-frame--muted {
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,46 @@
+/*
+  ManifestIQ Surfaces.
+  Per docs/design/UI_FOUNDATIONS.md §9: surface elevation is subtle. Hairline
+  border + minimal shadow. No heavy drop shadows, no glassmorphism, no
+  decorative gradients. One card, one job — no multi-purpose "everything"
+  card.
+*/
+
+.surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+}
+
+.surface--flush {
+  box-shadow: var(--shadow-0);
+}
+
+.surface--raised {
+  box-shadow: var(--shadow-2);
+}
+
+.surface--inset {
+  background: var(--color-surface-2);
+  border-color: var(--color-border);
+}
+
+/* The only hero surface: a stronger left-border severity accent is
+   permitted here and nowhere else. */
+.surface--hero {
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+.surface--hero.tone-critical {
+  border-left-color: var(--color-critical-red);
+}
+
+.surface--hero.tone-caution {
+  border-left-color: var(--color-caution-amber);
+}
+
+.surface--hero.tone-review {
+  border-left-color: var(--color-review-slate);
+}

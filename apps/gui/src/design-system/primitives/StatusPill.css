@@ -1,0 +1,44 @@
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.02em;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.status-pill--critical {
+  color: var(--color-critical-red);
+  background: var(--color-critical-bg);
+  border-color: var(--color-critical-red);
+}
+
+.status-pill--caution {
+  color: var(--color-caution-amber);
+  background: var(--color-caution-bg);
+  border-color: var(--color-caution-amber);
+}
+
+.status-pill--review {
+  color: var(--color-review-slate);
+  background: var(--color-review-bg);
+  border-color: var(--color-review-slate);
+}
+
+.status-pill--unknown {
+  color: var(--color-unknown-gray);
+  background: var(--color-surface-2);
+  border-color: var(--color-border-strong);
+  border-style: dashed;
+}
+
+/* Sanctioned green: evidence-integrity facts only. Never used for a
+   decision, readiness, or approval state. */
+.status-pill--integrity {
+  color: var(--color-integrity-green);
+  background: var(--color-integrity-bg);
+  border-color: var(--color-integrity-green);
+}

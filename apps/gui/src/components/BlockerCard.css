@@ -1,0 +1,141 @@
+.blocker-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+  padding: var(--space-5);
+}
+
+.blocker-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.blocker-card__severity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: var(--weight-bold);
+  color: var(--color-critical-red);
+}
+
+.blocker-card__severity-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-critical-red);
+}
+
+.blocker-card__domain {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-weight: var(--weight-medium);
+}
+
+/* Uniform 2-line min-height so the meta rows (Rule / Disposition / Impact)
+   align horizontally across all three cards regardless of title length. */
+.blocker-card__title {
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  line-height: 1.28;
+  color: var(--color-text);
+  margin: var(--space-4) 0 var(--space-5);
+  min-height: calc(2 * 1.28 * var(--text-lg));
+}
+
+.blocker-card__meta {
+  margin: 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.blocker-card__meta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.blocker-card__meta-row dt {
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  font-weight: var(--weight-medium);
+}
+
+.blocker-card__meta-row dd {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  text-align: right;
+}
+
+.blocker-card__rule {
+  color: var(--color-text);
+}
+
+.blocker-card__disposition {
+  color: var(--color-review-slate);
+  font-weight: var(--weight-medium);
+}
+
+.blocker-card__missing {
+  display: inline-block;
+  font-size: var(--text-xs);
+  color: var(--color-unknown-gray);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 1px var(--space-2);
+}
+
+.blocker-card__foot {
+  margin-top: var(--space-4);
+}
+
+.blocker-card__evidence {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-review-slate);
+  cursor: pointer;
+}
+
+.blocker-card__evidence:disabled {
+  color: var(--color-text-faint);
+  cursor: default;
+}
+
+.blocker-card__evidence-mark {
+  font-family: var(--font-mono);
+  opacity: 0.7;
+}
+
+.blocker-card__evidence-detail {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  word-break: break-word;
+}

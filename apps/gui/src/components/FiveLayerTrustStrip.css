@@ -1,0 +1,55 @@
+.trust-strip__header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.trust-strip__title {
+  margin: 0;
+}
+
+.trust-strip__note {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+}
+
+/* One instrument, five gates: a single bordered surface divided by thin
+   hairlines, not five detached boxes. */
+.trust-strip__instrument {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+
+.trust-strip__instrument > * + * {
+  border-left: 1px solid var(--color-border);
+}
+
+@media (max-width: 880px) {
+  .trust-strip__instrument {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .trust-strip__instrument > * {
+    border-top: 1px solid var(--color-border);
+  }
+  .trust-strip__instrument > *:nth-child(odd) {
+    border-left: none;
+  }
+  .trust-strip__instrument > *:nth-child(-n + 2) {
+    border-top: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .trust-strip__instrument {
+    grid-template-columns: 1fr;
+  }
+  .trust-strip__instrument > * {
+    border-left: none;
+  }
+}

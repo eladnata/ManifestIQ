@@ -1,0 +1,62 @@
+/*
+  ManifestIQ Layout.
+  Per docs/design/UI_FOUNDATIONS.md §4 and VISUAL_TASTE_DOCTRINE.md §9:
+  one focal point per screen, large whitespace by default, content held to a
+  boardroom-legible measure. No dense grids, no table-first landing.
+*/
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-bg);
+}
+
+.wrap {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.stack > * + * {
+  margin-top: var(--space-5);
+}
+
+.stack--tight > * + * {
+  margin-top: var(--space-2);
+}
+
+.stack--loose > * + * {
+  margin-top: var(--space-7);
+}
+
+/*
+  Bottom padding reserves space for the fixed Non-Claims footer (see
+  NonClaimsFooter.css --footer-height), so the last content in the room is
+  never obscured by it. The footer can wrap onto two lines on narrow
+  viewports, so this allows generous clearance rather than a tight fit.
+*/
+.room {
+  padding-top: var(--space-7);
+  padding-bottom: calc(var(--space-8) + var(--footer-height, 56px));
+}
+
+@media (max-width: 720px) {
+  .room {
+    padding-top: var(--space-5);
+    padding-bottom: calc(var(--space-6) + var(--footer-height, 92px));
+  }
+}

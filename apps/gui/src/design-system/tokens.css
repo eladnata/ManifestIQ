@@ -1,0 +1,135 @@
+/*
+  ManifestIQ Design Tokens.
+  Source of truth: docs/design/DESIGN_TOKENS.md — do not introduce a color,
+  size, radius, shadow, spacing, or type value that is not one of these
+  tokens. Where a value differs from the doctrine, the doctrine wins; fix
+  this file, not the other way around.
+
+  Default shipped mode is light luxury mode (warm off-white, graphite text).
+  Dark values are retained for prefers-color-scheme responsiveness only.
+*/
+
+:root {
+  /* Background & surface */
+  /* Warm off-white canvas per VISUAL_TASTE_DOCTRINE.md §7 ("warm off-white ...
+     never clinical white"). The prior #eef1f4 was a cool blue-gray that read as
+     a generic admin canvas; corrected to a warm bone/ivory. Surfaces are warm
+     near-white, not clinical #ffffff. */
+  --color-bg: #f3f0e8;
+  --color-surface: #fdfcf9;
+  --color-surface-2: #f0ece2;
+
+  /* Text — graphite, warmed slightly to sit on the warm canvas */
+  --color-text: #1f2226;
+  --color-text-muted: #63615a;
+  --color-text-faint: #928d80;
+
+  /* Border — warm hairlines, not cool gray */
+  --color-border: #e4ded1;
+  --color-border-strong: #d2c9b7;
+
+  /* Brand & status — brand gold is identity only, never a status */
+  --color-brand-gold: #9a7b34;
+  --color-critical-red: #9c2027;
+  --color-caution-amber: #8a5d00;
+  --color-review-slate: #2f5b8a;
+  --color-integrity-green: #1f7a5a;
+  --color-unknown-gray: #6a7885;
+
+  --color-critical-bg: #f7e9ea;
+  --color-caution-bg: #f7efdd;
+  --color-review-bg: #e7eff7;
+  --color-integrity-bg: #e4f1eb;
+
+  /* Spacing scale (4px base) */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Typography sizes — primary content is never below --text-base */
+  --text-2xs: 10px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 14px;
+  --text-md: 15px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 26px;
+  --text-3xl: 32px;
+  --text-hero: 46px;
+  --text-hero-lg: 58px;
+
+  /* Typography families — system stacks only, no webfonts.
+     Display is an editorial serif for the verdict headline only (taste
+     doctrine §6). "Iowan Old Style"/"Palatino Linotype" give a warm,
+     private-bank serif; Georgia is the broad fallback. */
+  --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Cascadia Code", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --weight-regular: 400;
+  --weight-medium: 600;
+  --weight-bold: 700;
+
+  /* Radius — restrained */
+  --radius-sm: 3px;
+  --radius: 4px;
+  --radius-md: 6px;
+  --radius-pill: 100px;
+
+  /* Shadows — premium restraint, warm-tinted to sit on the warm canvas */
+  --shadow-0: none;
+  --shadow-1: 0 1px 2px rgba(58, 48, 28, 0.05), 0 1px 1px rgba(58, 48, 28, 0.04);
+  --shadow-2: 0 12px 32px -12px rgba(58, 48, 28, 0.16), 0 2px 6px rgba(58, 48, 28, 0.05);
+
+  /* Icon sizes */
+  --icon-sm: 14px;
+  --icon-md: 16px;
+  --icon-lg: 20px;
+
+  /* Row heights */
+  --row-comfortable: 44px;
+  --row-compact: 36px;
+  --target-min: 44px;
+
+  /* Layout widths */
+  --layout-max: 1200px;
+  --layout-measure: 72ch;
+  --gutter: var(--space-7);
+
+  /* Motion — functional only, never celebratory */
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+  --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+/* Dark values retained per DESIGN_TOKENS.md. Light luxury mode is the
+   shipped default look for the Board Verdict Room. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0f151b;
+    --color-surface: #151d25;
+    --color-surface-2: #111820;
+    --color-text: #e7edf3;
+    --color-text-muted: #9fb0bf;
+    --color-text-faint: #6f8091;
+    --color-border: #25313c;
+    --color-border-strong: #324150;
+    --color-brand-gold: #c9a75a;
+    --color-critical-red: #e07b82;
+    --color-caution-amber: #d7a94b;
+    --color-review-slate: #8fb4dc;
+    --color-integrity-green: #6fc4a0;
+    --color-unknown-gray: #8496a4;
+    --color-critical-bg: #2a171a;
+    --color-caution-bg: #241d10;
+    --color-review-bg: #14202c;
+    --color-integrity-bg: #122019;
+  }
+}

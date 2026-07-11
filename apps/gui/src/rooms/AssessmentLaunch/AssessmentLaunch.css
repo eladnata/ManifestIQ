@@ -1,0 +1,123 @@
+.assessment-launch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 760px;
+}
+
+.assessment-launch__headline {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: var(--space-2) 0 0;
+}
+
+.assessment-launch__sub {
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+}
+
+.assessment-launch__card {
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.assessment-launch__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.assessment-launch__segmented {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.assessment-launch__segment {
+  appearance: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  min-height: var(--target-min);
+}
+
+.assessment-launch__segment--active {
+  color: var(--color-surface);
+  background: var(--color-text);
+  border-color: var(--color-text);
+}
+
+.assessment-launch__input {
+  width: 100%;
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  min-height: var(--target-min);
+}
+
+.assessment-launch__input:focus-visible {
+  outline: 2px solid var(--color-review-slate);
+  outline-offset: 1px;
+}
+
+.assessment-launch__note {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-caution-amber);
+}
+
+.assessment-launch__guarantees {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.assessment-launch__guarantee-card {
+  padding: var(--space-4) var(--space-5);
+}
+
+.assessment-launch__guarantee-text {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.assessment-launch__outputs {
+  padding: var(--space-4) var(--space-5);
+}
+
+.assessment-launch__output-list {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.assessment-launch__actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media (max-width: 640px) {
+  .assessment-launch__guarantees {
+    grid-template-columns: 1fr;
+  }
+}

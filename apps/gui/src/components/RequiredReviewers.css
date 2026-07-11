@@ -1,0 +1,35 @@
+.required-reviewers {
+  padding: var(--space-5) var(--space-5) var(--space-5);
+}
+
+.required-reviewers__label {
+  display: block;
+  margin-bottom: var(--space-1);
+}
+
+.required-reviewers__note {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+  margin-bottom: var(--space-4);
+}
+
+/* A calm roster — wrapped refined chips, no scroll box, no cap. Secondary to
+   the verdict and blockers (VISUAL_TASTE_DOCTRINE §9: never a wall of chips
+   that dominates; here it is a quiet supporting rail). */
+.required-reviewers__chips {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.required-reviewers__chip {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-surface);
+  white-space: nowrap;
+}

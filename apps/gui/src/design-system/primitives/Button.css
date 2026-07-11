@@ -1,0 +1,48 @@
+.btn {
+  appearance: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-5);
+  min-height: var(--target-min);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: border-color var(--motion-fast) var(--ease), background-color var(--motion-fast) var(--ease),
+    color var(--motion-fast) var(--ease);
+}
+
+/* Primary: solid, high-contrast ink. Never green — this is a navigational
+   action, never an approval. */
+.btn--primary {
+  background: var(--color-text);
+  color: var(--color-surface);
+  border-color: var(--color-text);
+}
+
+.btn--primary:hover {
+  background: var(--color-text-muted);
+  border-color: var(--color-text-muted);
+}
+
+/* Secondary: quiet, outlined, subordinate to primary. */
+.btn--secondary {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+.btn--secondary:hover {
+  border-color: var(--color-text-muted);
+}
+
+/* Danger: rare, destructive/escalation only. Never the default action. */
+.btn--danger {
+  background: var(--color-surface);
+  color: var(--color-critical-red);
+  border-color: var(--color-critical-red);
+}
+
+.btn--danger:hover {
+  background: var(--color-critical-bg);
+}

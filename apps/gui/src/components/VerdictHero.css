@@ -1,0 +1,167 @@
+.verdict-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+}
+
+/* Severity is carried by a single restrained top rule, preflight-instrument
+   style — calm, not alarmist. Red is precious (taste doctrine §7). */
+.verdict-hero {
+  border-top: 3px solid var(--color-unknown-gray);
+}
+.verdict-hero--critical {
+  border-top-color: var(--color-critical-red);
+}
+.verdict-hero--caution {
+  border-top-color: var(--color-caution-amber);
+}
+.verdict-hero--review {
+  border-top-color: var(--color-review-slate);
+}
+
+.verdict-hero__statement {
+  padding: var(--space-7) var(--space-7) var(--space-7);
+}
+
+.verdict-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.verdict-hero__eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-critical-red);
+}
+
+.verdict-hero__headline {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-hero-lg);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: var(--color-text);
+  margin: var(--space-3) 0 0;
+  text-wrap: balance;
+}
+
+.verdict-hero__disclaimer {
+  margin: var(--space-4) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-critical-red);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.01em;
+}
+
+.verdict-hero__reason {
+  margin: var(--space-5) 0 0;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-md);
+  line-height: 1.5;
+  color: var(--color-text);
+  max-width: var(--layout-measure);
+}
+
+.verdict-hero__reason-label {
+  display: inline-block;
+  font-size: var(--text-2xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  font-weight: var(--weight-bold);
+  margin-right: var(--space-3);
+  vertical-align: 1px;
+}
+
+/* Assurance rail: a calm supporting panel, warm inset, no green. */
+.verdict-hero__rail {
+  background: var(--color-surface-2);
+  border-left: 1px solid var(--color-border);
+  padding: var(--space-7) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.verdict-hero__score-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.verdict-hero__score-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.verdict-hero__score-number {
+  font-size: var(--text-hero);
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  color: var(--color-text);
+}
+
+.verdict-hero__score-scale {
+  font-size: var(--text-lg);
+  color: var(--color-text-faint);
+}
+
+.verdict-hero__score-missing {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-unknown-gray);
+  font-style: italic;
+}
+
+.verdict-hero__meter {
+  height: 8px;
+  border-radius: var(--radius-pill);
+  margin-top: var(--space-2);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 6px,
+    rgba(120, 110, 90, 0.14) 6px 7px
+  );
+  border: 1px solid var(--color-border-strong);
+  overflow: hidden;
+}
+
+.verdict-hero__meter-fill {
+  display: block;
+  height: 100%;
+  background: var(--color-caution-amber);
+  border-radius: var(--radius-pill);
+}
+
+.verdict-hero__score-caption {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+}
+
+.verdict-hero__rail-divider {
+  height: 1px;
+  background: var(--color-border);
+}
+
+@media (max-width: 880px) {
+  .verdict-hero {
+    grid-template-columns: 1fr;
+  }
+  .verdict-hero__rail {
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+  }
+  .verdict-hero__headline {
+    font-size: var(--text-hero);
+  }
+}

@@ -1,0 +1,51 @@
+.limitations-panel {
+  padding: var(--space-5);
+}
+
+.limitations-panel__label {
+  display: block;
+  margin-bottom: var(--space-1);
+}
+
+.limitations-panel__note {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+  margin-bottom: var(--space-4);
+}
+
+.limitations-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.limitations-panel__item {
+  position: relative;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  padding-left: var(--space-4);
+}
+
+/* Calm trust-boundary marker — a quiet amber tick, not an error icon. */
+.limitations-panel__item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: var(--color-caution-amber);
+  opacity: 0.7;
+}
+
+.limitations-panel__empty {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}

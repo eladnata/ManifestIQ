@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Optional
 
@@ -21,7 +22,8 @@ from scanner.governance import (
     prepare_release_evidence,
     run_governance_checks,
 )
-from scanner.ui import build_board_verdict_view, render_executive_cockpit_html
+from scanner.gui_server.server import run_server
+from scanner.ui import build_board_verdict_data_contract, build_board_verdict_view, render_executive_cockpit_html
 from scanner.validation.goldset import compare_goldset
 from scanner.validation.portfolio import aggregate_portfolio
 from scanner.validation.runner import run_validation_suite
@@ -392,3 +394,40 @@ def render_gui_command(
     table.add_row("Limitations", str(len(view["limitations"])))
     table.add_row("Output", str(out_path))
     console.print(table)
+
+
+@app.command("render-gui-data")
+def render_gui_data_command(
+    evidence_package: Path = typer.Option(..., "--evidence-package", exists=True, file_okay=False, dir_okay=True, help="Evidence package directory to read"),
+    output: Path = typer.Option(Path("gui-output"), "--output", help="Output directory for the JSON data contract"),
+) -> None:
+    """Export the Board Verdict Room data contract as JSON for the static React GUI shell."""
+    contract = build_board_verdict_data_contract(evidence_package)
+    output.mkdir(parents=True, exist_ok=True)
+    out_path = output / "board-verdict-data.json"
+    out_path.write_text(json.dumps(contract, indent=2, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+
+    table = Table(title="ManifestIQ Board Verdict — Data Contract")
+    table.add_column("Field")
+    table.add_column("Value")
+    table.add_row("Visible Decision", str(contract["visible_decision"]))
+    table.add_row("Executive Label", str(contract["executive_decision_label"]))
+    table.add_row("Human Approval", str(contract["layers"]["human_approval"]["display"]))
+    table.add_row("Output", str(out_path))
+    console.print(table)
+
+
+@app.command("gui")
+def gui_command(
+    host: str = typer.Option("127.0.0.1", "--host", help="Bind host (local-only)"),
+    port: int = typer.Option(4173, "--port", help="Bind port (0 = pick any free local port)"),
+    runs_dir: Path = typer.Option(Path("gui-runs"), "--runs-dir", help="Local directory for GUI-initiated run outputs"),
+    static_dir: Path = typer.Option(Path("apps/gui/dist"), "--static-dir", help="Built frontend directory"),
+) -> None:
+    """
+    Serve the local ManifestIQ GUI assessment workbench: the built static
+    frontend plus a same-origin, local-only API. No cloud, no telemetry, no
+    AI. The only network action ever performed is an explicit local `git
+    clone`, and only when the user chooses a Git source and starts a scan.
+    """
+    run_server(host=host, port=port, runs_dir=runs_dir, static_dir=static_dir)

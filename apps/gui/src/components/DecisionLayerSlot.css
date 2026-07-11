@@ -1,0 +1,99 @@
+.layer-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  min-height: 108px;
+  background: var(--color-surface);
+}
+
+/* Annunciator accent: a short top rule per gate, colored by tone. Calm. */
+.layer-slot__accent {
+  position: absolute;
+  top: 0;
+  left: var(--space-4);
+  width: 28px;
+  height: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--color-unknown-gray);
+}
+
+.layer-slot--critical .layer-slot__accent {
+  background: var(--color-critical-red);
+}
+.layer-slot--caution .layer-slot__accent {
+  background: var(--color-caution-amber);
+}
+.layer-slot--review .layer-slot__accent {
+  background: var(--color-review-slate);
+}
+.layer-slot--unknown .layer-slot__accent {
+  background: var(--color-unknown-gray);
+}
+
+.layer-slot__index {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+  letter-spacing: 0.08em;
+}
+
+.layer-slot__name {
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-weight: var(--weight-medium);
+}
+
+.layer-slot__state {
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  line-height: 1.25;
+  margin-top: auto;
+}
+
+.layer-slot--critical .layer-slot__state {
+  color: var(--color-critical-red);
+}
+.layer-slot--caution .layer-slot__state {
+  color: var(--color-caution-amber);
+}
+.layer-slot--review .layer-slot__state {
+  color: var(--color-review-slate);
+}
+.layer-slot--unknown .layer-slot__state {
+  color: var(--color-unknown-gray);
+}
+
+/* Permanently empty human-approval gate: dashed hatch, italic, no positive
+   tone available to it by design. */
+.layer-slot--empty {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 9px,
+    rgba(120, 110, 90, 0.09) 9px 10px
+  );
+}
+
+.layer-slot--empty .layer-slot__accent {
+  background: transparent;
+  border-top: 3px dashed var(--color-border-strong);
+  height: 0;
+}
+
+.layer-slot--empty .layer-slot__state {
+  font-style: italic;
+  color: var(--color-unknown-gray);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-base);
+}
+
+.layer-slot__empty-tag {
+  margin-top: var(--space-2);
+  font-size: var(--text-2xs);
+  line-height: 1.35;
+  color: var(--color-unknown-gray);
+  border-left: 2px dashed var(--color-border-strong);
+  padding-left: var(--space-2);
+}
