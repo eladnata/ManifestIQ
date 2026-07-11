@@ -19,6 +19,7 @@ interface EvidenceSealedProps {
  */
 export function EvidenceSealed({ run, limitations, onOpenVerdict }: EvidenceSealedProps): ReactElement {
   const integrity = run.integrity;
+  const journeyLabel = run.journey_state.replace(/_/g, " ");
   const tone = integrity?.state === "Verified" ? "integrity" : integrity?.state === "Partial" ? "caution" : "unknown";
   const label =
     integrity == null
@@ -35,12 +36,26 @@ export function EvidenceSealed({ run, limitations, onOpenVerdict }: EvidenceSeal
       <h1 className="evidence-sealed__headline">Is the evidence intact and ready to review?</h1>
 
       <Surface variant="raised" className="evidence-sealed__card">
-        <StatusPill label={label} tone={tone} />
-        <div className="evidence-sealed__fingerprint">
-          <span className="type-eyebrow">Manifest fingerprint</span>
-          <span className="type-mono evidence-sealed__hash">
-            {run.manifest_hash ? `⌗ ${run.manifest_hash.slice(0, 16)}…${run.manifest_hash.slice(-6)}` : "Not available"}
-          </span>
+        <div className="evidence-sealed__hero">
+          <div className="evidence-sealed__seal">
+            <span className="type-eyebrow">Evidence vault</span>
+            <span className="type-mono evidence-sealed__hash">
+              {run.manifest_hash ? `⌗ ${run.manifest_hash.slice(0, 16)}…${run.manifest_hash.slice(-6)}` : "Not available"}
+            </span>
+            <StatusPill label={label} tone={tone} />
+          </div>
+          <div className="evidence-sealed__hero-metrics">
+            <div>
+              <span className="type-eyebrow">Artifacts verified</span>
+              <span className="evidence-sealed__count">
+                {integrity ? `${integrity.verified_count} / ${integrity.total_count}` : "—"}
+              </span>
+            </div>
+            <div>
+              <span className="type-eyebrow">Run state</span>
+              <span className="evidence-sealed__journey">{journeyLabel}</span>
+            </div>
+          </div>
         </div>
         <div className="evidence-sealed__meta">
           <div>
@@ -48,9 +63,9 @@ export function EvidenceSealed({ run, limitations, onOpenVerdict }: EvidenceSeal
             <span className="type-mono evidence-sealed__path">{run.evidence_dir}</span>
           </div>
           <div>
-            <span className="type-eyebrow">Artifacts verified</span>
-            <span className="evidence-sealed__count">
-              {integrity ? `${integrity.verified_count} / ${integrity.total_count}` : "—"}
+            <span className="type-eyebrow">Manifest fingerprint</span>
+            <span className="type-mono evidence-sealed__path">
+              {run.manifest_hash ?? "Not available"}
             </span>
           </div>
         </div>

@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  max-width: 760px;
+  max-width: 980px;
 }
 
 .assessment-launch__headline {
@@ -11,6 +11,7 @@
   font-weight: var(--weight-bold);
   color: var(--color-text);
   margin: var(--space-2) 0 0;
+  max-width: 14ch;
 }
 
 .assessment-launch__sub {
@@ -19,8 +20,61 @@
   color: var(--color-text-muted);
 }
 
-.assessment-launch__card {
+.assessment-launch__hero-card {
   padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  background:
+    radial-gradient(circle at top right, rgba(154, 123, 52, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(253, 252, 249, 0.98), rgba(246, 242, 233, 0.98));
+}
+
+.assessment-launch__hero-band {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-5);
+  align-items: flex-start;
+}
+
+.assessment-launch__hero-copy {
+  margin: var(--space-2) 0 0;
+  max-width: 58ch;
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.assessment-launch__hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  gap: var(--space-3);
+  width: min(420px, 100%);
+}
+
+.assessment-launch__metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border: 1px solid rgba(184, 171, 140, 0.44);
+  border-radius: var(--radius-lg);
+  background: rgba(253, 252, 249, 0.78);
+}
+
+.assessment-launch__metric strong {
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+
+.assessment-launch__intake-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(260px, 0.9fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.assessment-launch__intake-panel {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -44,8 +98,8 @@
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   color: var(--color-text-muted);
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border-strong);
+  background: rgba(240, 236, 226, 0.88);
+  border: 1px solid rgba(184, 171, 140, 0.58);
   border-radius: var(--radius-pill);
   padding: var(--space-2) var(--space-4);
   cursor: pointer;
@@ -62,11 +116,12 @@
   width: 100%;
   font-size: var(--text-base);
   padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid rgba(184, 171, 140, 0.58);
   border-radius: var(--radius);
-  background: var(--color-surface);
+  background: rgba(253, 252, 249, 0.88);
   color: var(--color-text);
   min-height: var(--target-min);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
 .assessment-launch__input:focus-visible {
@@ -88,6 +143,7 @@
 
 .assessment-launch__guarantee-card {
   padding: var(--space-4) var(--space-5);
+  min-height: 100%;
 }
 
 .assessment-launch__guarantee-text {
@@ -99,6 +155,7 @@
 
 .assessment-launch__outputs {
   padding: var(--space-4) var(--space-5);
+  background: rgba(253, 252, 249, 0.76);
 }
 
 .assessment-launch__output-list {
@@ -119,5 +176,18 @@
 @media (max-width: 640px) {
   .assessment-launch__guarantees {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .assessment-launch__hero-band,
+  .assessment-launch__intake-grid {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .assessment-launch__hero-metrics {
+    grid-template-columns: 1fr;
+    width: 100%;
   }
 }

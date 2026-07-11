@@ -12,7 +12,7 @@ from scanner.app.cli import app
 from scanner.core.orchestrator import run_scan
 from scanner.core.workspace import prepare_folder_workspace
 from scanner.gui_server.api import health_payload
-from scanner.gui_server.runs import RunManager, validate_preflight
+from scanner.gui_server.runs import RunManager, derive_run_journey_state, validate_preflight
 
 SAMPLE_PROJECT = Path("tests/sample_projects/insecure-python")
 
@@ -174,6 +174,9 @@ def test_run_starts_completes_writes_evidence_and_board_verdict_data(tmp_path):
 
     assert run["integrity"]["state"] == "Verified"
     assert run["manifest_hash"]
+    assert run["journey_state"] == "verdict_ready"
+    assert run["next_station"] == "sealed"
+    assert run["board_verdict_ready"] is True
 
 
 # ---------------------------------------------------------------------------
@@ -211,6 +214,56 @@ def test_board_verdict_data_unavailable_before_sealed(tmp_path):
         run = manager.get_run(run_id)
         assert run["status"] == "sealed"
     _wait_for_completion(manager, run_id)
+
+
+def test_completed_scan_does_not_remain_in_scan_running_state(tmp_path):
+    manager = RunManager(tmp_path / "gui-runs")
+    result = manager.start_run("folder", str(SAMPLE_PROJECT), "finance-sox")
+    run_id = result["run"]["run_id"]
+
+    run = _wait_for_completion(manager, run_id)
+
+    assert run["status"] == "sealed"
+    assert run["journey_state"] != "scan_running"
+    assert run["journey_state"] != "scan_complete_unsealed"
+    assert run["journey_state"] in {"evidence_sealed", "verdict_ready"}
+
+
+def test_failed_scan_remains_failed_closed_and_not_sealed(tmp_path):
+    manager = RunManager(tmp_path / "gui-runs")
+    result = manager.start_run("folder", "does/not/exist", "finance-sox")
+    assert result["error"] == "preflight_failed"
+
+    state = derive_run_journey_state(
+        status="failed",
+        stages=[],
+        integrity=None,
+        manifest_hash=None,
+        board_verdict_ready=False,
+    )
+    assert state == "scan_failed_closed"
+
+
+def test_run_journey_state_distinguishes_scan_complete_unsealed():
+    stages = [
+        {"id": "source_intake", "state": "complete"},
+        {"id": "project_inventory", "state": "complete"},
+        {"id": "static_analysis", "state": "complete"},
+        {"id": "control_mapping", "state": "complete"},
+        {"id": "risk_evaluation", "state": "complete"},
+        {"id": "evidence_package_build", "state": "complete"},
+        {"id": "manifest_sealing", "state": "pending"},
+    ]
+
+    state = derive_run_journey_state(
+        status="running",
+        stages=stages,
+        integrity=None,
+        manifest_hash=None,
+        board_verdict_ready=False,
+    )
+
+    assert state == "scan_complete_unsealed"
 
 
 def test_run_not_found_returns_none(tmp_path):

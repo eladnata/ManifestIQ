@@ -63,6 +63,13 @@ export interface RunStatus {
   schema_version: string;
   run_id: string;
   status: "running" | "sealed" | "failed";
+  journey_state:
+    | "preflight_ready"
+    | "scan_running"
+    | "scan_failed_closed"
+    | "scan_complete_unsealed"
+    | "evidence_sealed"
+    | "verdict_ready";
   source_type: SourceType;
   profile: string;
   run_dir: string;
@@ -73,6 +80,8 @@ export interface RunStatus {
   stages: StageStatus[];
   integrity: IntegritySummary | null;
   manifest_hash: string | null;
+  board_verdict_ready: boolean;
+  next_station: "sealed" | null;
   non_claims: string[];
 }
 
